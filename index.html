@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timão C# — Aprenda C# do zero com a energia do Corinthians</title>
+<meta name="description" content="Curso gratuito de C# em português, com exemplos de futebol e o clima da Fiel. Oito módulos, exercícios e progresso salvo no navegador.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' fill='%23fff' text-anchor='middle'%3EC%23%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip" href="#modulos">Pular para os módulos</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="#top">
+      <span class="brand__crest" aria-hidden="true">C#</span>
+      <span class="brand__txt">Timão<strong>C#</strong></span>
+    </a>
+    <nav class="nav" aria-label="Módulos">
+      <a href="#modulos">Módulos</a>
+      <a href="#desafio">Desafio final</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <div class="progress" title="Seu progresso">
+      <div class="progress__bar"><span id="progress-fill" style="width:0%"></span></div>
+      <span class="progress__label" id="progress-label">0/8</span>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="wrap hero__in">
+      <div class="hero__copy">
+        <p class="eyebrow">Curso gratuito · 8 módulos · 100% em português</p>
+        <h1>Aprenda <span class="hl">C#</span> com a raça do Timão</h1>
+        <p class="lead">
+          Do primeiro <code>Console.WriteLine</code> até LINQ, com exemplos de escalação,
+          tabela de campeonato e gols. Cada módulo tem código comentado e um quiz rápido —
+          seu progresso fica salvo no navegador.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#l1">Começar do zero</a>
+          <a class="btn btn--ghost" href="#modulos">Ver todos os módulos</a>
+        </div>
+        <p class="hero__note">Não precisa instalar nada para acompanhar. Para praticar: <strong>.NET SDK</strong> + VS Code.</p>
+      </div>
+
+      <div class="hero__card">
+        <div class="crest" aria-hidden="true">
+          <svg viewBox="0 0 200 240" role="img" aria-label="Escudo estilizado preto e branco">
+            <path d="M100 8 184 34v86c0 52-38 94-84 112C54 214 16 172 16 120V34z" fill="#fff"/>
+            <path d="M100 8 184 34v86c0 52-38 94-84 112C54 214 16 172 16 120V34z" fill="none" stroke="#111" stroke-width="8"/>
+            <rect x="34" y="44" width="132" height="24" fill="#111"/>
+            <rect x="34" y="170" width="132" height="24" fill="#111"/>
+            <text x="100" y="140" text-anchor="middle" font-family="ui-monospace, monospace" font-size="54" font-weight="700" fill="#111">C#</text>
+            <text x="100" y="164" text-anchor="middle" font-family="ui-monospace, monospace" font-size="17" letter-spacing="4" fill="#111">1910</text>
+          </svg>
+        </div>
+        <pre class="code code--mini"><code class="csharp">// Todo corinthiano começa assim
+Console.WriteLine("Vai, Timão!");</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUE C# -->
+  <section class="wrap section">
+    <h2 class="section__title">Por que C#?</h2>
+    <div class="grid grid--3">
+      <article class="card">
+        <h3>Mercado de trabalho</h3>
+        <p>C# é a linguagem do ecossistema .NET: back-end, APIs, sistemas corporativos, jogos e apps. Tem vaga em praticamente toda empresa grande do país.</p>
+      </article>
+      <article class="card">
+        <h3>Unity e games</h3>
+        <p>Unity usa C# como linguagem principal. Se você quer fazer jogos, aqui é o caminho mais direto — inclusive 2D leve, que roda liso em notebook.</p>
+      </article>
+      <article class="card">
+        <h3>Tipagem que ensina</h3>
+        <p>O compilador reclama antes de você perder tempo. Para quem está começando, esse feedback constante acelera muito o aprendizado.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- MÓDULOS -->
+  <section class="wrap section" id="modulos">
+    <div class="section__head">
+      <h2 class="section__title">Os 8 módulos</h2>
+      <p class="section__sub">Na ordem. Cada um leva de 15 a 30 minutos e termina com um quiz de três alternativas.</p>
+    </div>
+
+    <!-- 1 -->
+    <article class="lesson" id="l1" data-lesson="1">
+      <header class="lesson__head">
+        <span class="lesson__num">01</span>
+        <div>
+          <h3>Olá, Timão — seu primeiro programa</h3>
+          <p class="lesson__meta">Saída no console · estrutura de um programa</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Todo programa em C# vive dentro de uma <strong>classe</strong> e começa no método <code>Main</code>. A partir do C# 9 você pode escrever isso em poucas linhas (top-level statements), que é o formato dos exemplos aqui.</p>
+        <pre class="code"><code class="csharp">// Programa.cs
+Console.WriteLine("Vai, Timão!");
+Console.WriteLine("Aprender C# é igual subir a Vila: no começo cansa.");
+
+int gols = 3;
+Console.WriteLine($"Placar: Corinthians {gols} x 0");</code></pre>
+        <ul class="checks">
+          <li><code>Console.WriteLine</code> escreve uma linha no terminal.</li>
+          <li>O <code>$</code> antes das aspas liga a <strong>interpolação</strong>: <code>{gols}</code> é substituído pelo valor da variável.</li>
+          <li>Cada instrução termina em <code>;</code> — esquecer o ponto e vírgula é o erro nº 1 de quem começa.</li>
+        </ul>
+        <p class="tip">Para rodar de verdade: instale o .NET SDK, crie um projeto com <code>dotnet new console -o Timao</code> e execute <code>dotnet run</code> dentro da pasta.</p>
+
+        <div class="quiz" data-quiz="1">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que o <code>$</code> faz em <code>$"Corinthians {gols}"</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Converte o texto em número</button>
+            <button class="opt" data-correct="true">Permite inserir variáveis dentro do texto</button>
+            <button class="opt" data-correct="false">Indica que a linha é um comentário</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 2 -->
+    <article class="lesson" id="l2" data-lesson="2">
+      <header class="lesson__head">
+        <span class="lesson__num">02</span>
+        <div>
+          <h3>Variáveis e tipos — a ficha do jogador</h3>
+          <p class="lesson__meta">int, string, double, bool, var</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Cada informação tem um <strong>tipo</strong>. Em C# você declara o tipo (ou usa <code>var</code> quando o compilador consegue deduzir).</p>
+        <pre class="code"><code class="csharp">string nome     = "Yuri Alberto";   // texto
+int    camisa   = 9;                // inteiro
+double altura   = 1.82;             // decimal (ponto, não vírgula)
+bool   titular  = true;             // verdadeiro/falso
+var    gols     = 17;               // o compilador deduz int
+
+Console.WriteLine($"{nome} ({camisa}) tem {altura}m e {gols} gols.");</code></pre>
+        <ul class="checks">
+          <li><code>int</code> = números inteiros; <code>double</code> e <code>decimal</code> = com casas decimais.</li>
+          <li><code>string</code> sempre entre aspas duplas; <code>char</code> entre aspas simples.</li>
+          <li><code>var</code> não é "sem tipo": o tipo é definido na primeira atribuição e não muda.</li>
+          <li>Em C# o separador decimal é <strong>ponto</strong>. <code>1,82</code> não compila.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="2">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual tipo guarda a altura de um jogador como 1.82?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">int</button>
+            <button class="opt" data-correct="true">double</button>
+            <button class="opt" data-correct="false">bool</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 3 -->
+    <article class="lesson" id="l3" data-lesson="3">
+      <header class="lesson__head">
+        <span class="lesson__num">03</span>
+        <div>
+          <h3>Condições — vitória, empate ou derrota</h3>
+          <p class="lesson__meta">if / else · operadores · switch</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Programa é decisão. Com <code>if</code> você escolhe um caminho conforme uma condição booleana.</p>
+        <pre class="code"><code class="csharp">int corinthians = 2;
+int adversario  = 1;
+
+if (corinthians &gt; adversario)
+{
+    Console.WriteLine("Vitória! Três pontos no bolso.");
+}
+else if (corinthians == adversario)
+{
+    Console.WriteLine("Empate. Um ponto e muita reclamação da arbitragem.");
+}
+else
+{
+    Console.WriteLine("Derrota. Semana de silêncio no grupo.");
+}
+
+// switch é bom para várias opções fixas
+char resultado = 'V';
+
+switch (resultado)
+{
+    case 'V': Console.WriteLine("3 pontos"); break;
+    case 'E': Console.WriteLine("1 ponto");  break;
+    case 'D': Console.WriteLine("0 ponto");  break;
+    default:  Console.WriteLine("Rodada não jogada"); break;
+}</code></pre>
+        <ul class="checks">
+          <li>Comparação de igualdade é <code>==</code> (dois iguais). Um só é atribuição.</li>
+          <li>Operadores lógicos: <code>&amp;&amp;</code> (e), <code>||</code> (ou), <code>!</code> (não).</li>
+          <li>Use <code>else if</code> em cadeia em vez de <code>if</code> dentro de <code>if</code> — fica mais legível.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="3">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Como testar se dois placares são iguais?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">if (a = b)</button>
+            <button class="opt" data-correct="true">if (a == b)</button>
+            <button class="opt" data-correct="false">if (a equals b)</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 4 -->
+    <article class="lesson" id="l4" data-lesson="4">
+      <header class="lesson__head">
+        <span class="lesson__num">04</span>
+        <div>
+          <h3>Repetição — escalando os 11</h3>
+          <p class="lesson__meta">for · while · foreach</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Quando algo se repete, você usa laço. <code>for</code> serve quando sabe quantas vezes; <code>foreach</code> percorre coleções; <code>while</code> repete enquanto a condição for verdadeira.</p>
+        <pre class="code"><code class="csharp">string[] escalacao =
+{
+    "Hugo Souza", "Fagner", "Gil", "Cássio", "Fábio Santos",
+    "Roni", "Renato Augusto", "Rodrigo Garro",
+    "Yuri Alberto", "Róger Guedes", "Gustavo Mosquito"
+};
+
+// for com contador: ideal para "1 a 11"
+for (int i = 0; i &lt; escalacao.Length; i++)
+{
+    Console.WriteLine($"{i + 1}. {escalacao[i]}");
+}
+
+// foreach: mais legível quando você só quer cada item
+int titulares = 0;
+foreach (string jogador in escalacao)
+{
+    titulares++;
+}
+
+Console.WriteLine($"Total de titulares: {titulares}");</code></pre>
+        <ul class="checks">
+          <li>Arrays e listas começam no índice <strong>0</strong> — o primeiro jogador é <code>escalacao[0]</code>.</li>
+          <li><code>escalacao.Length</code> evita estourar o índice; nunca escreva <code>i &lt;= Length</code>.</li>
+          <li><code>break</code> sai do laço; <code>continue</code> pula para a próxima volta.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="4">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual é o índice do primeiro item de um array?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">0</button>
+            <button class="opt" data-correct="false">1</button>
+            <button class="opt" data-correct="false">Depende do tamanho</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 5 -->
+    <article class="lesson" id="l5" data-lesson="5">
+      <header class="lesson__head">
+        <span class="lesson__num">05</span>
+        <div>
+          <h3>Métodos — reaproveitando o trabalho</h3>
+          <p class="lesson__meta">parâmetros · retorno · sobrecarga</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Método é um bloco com nome que recebe dados (parâmetros) e devolve um resultado (retorno). Serve para não repetir cálculo — e para dar nome à regra do jogo.</p>
+        <pre class="code"><code class="csharp">int Aproveitamento(int pontos, int jogos)
+{
+    if (jogos == 0) return 0;
+    return pontos * 100 / (jogos * 3);   // % dos pontos possíveis
+}
+
+string Situacao(int aproveitamento) =&gt; aproveitamento switch
+{
+    &gt;= 70 =&gt; "brigando pelo título",
+    &gt;= 45 =&gt; "no meio da tabela",
+    _       =&gt; "brigando embaixo"
+};
+
+int pontos = 61;
+int jogos  = 30;
+int aprov   = Aproveitamento(pontos, jogos);
+
+Console.WriteLine($"Aproveitamento: {aprov}% — {Situacao(aprov)}");</code></pre>
+        <ul class="checks">
+          <li><code>return</code> encerra o método e entrega o valor. Métodos sem retorno usam <code>void</code>.</li>
+          <li>A forma <code>=&gt;</code> (expression-bodied) é atalho para métodos de uma linha só.</li>
+          <li><code>_</code> no <code>switch</code> é o caso padrão (o "qualquer outro valor").</li>
+        </ul>
+
+        <div class="quiz" data-quiz="5">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que <code>return</code> faz dentro de um método?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Reinicia o método</button>
+            <button class="opt" data-correct="true">Encerra o método devolvendo um valor</button>
+            <button class="opt" data-correct="false">Imprime o valor na tela</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 6 -->
+    <article class="lesson" id="l6" data-lesson="6">
+      <header class="lesson__head">
+        <span class="lesson__num">06</span>
+        <div>
+          <h3>Classes e objetos — o jogador é uma classe</h3>
+          <p class="lesson__meta">propriedades · construtor · métodos de instância</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p><strong>Classe</strong> é o molde; <strong>objeto</strong> é cada jogador concreto criado a partir dele. Isso é a base da orientação a objetos — e o que você vai usar todo dia.</p>
+        <pre class="code"><code class="csharp">class Jogador
+{
+    public string Nome   { get; set; }
+    public int    Camisa { get; set; }
+    public int    Gols   { get; set; }
+
+    // construtor: roda quando você faz new Jogador(...)
+    public Jogador(string nome, int camisa)
+    {
+        Nome   = nome;
+        Camisa = camisa;
+        Gols   = 0;
+    }
+
+    public void MarcarGol() =&gt; Gols++;
+
+    public string Resumo() =&gt; $"#{Camisa} {Nome} — {Gols} gols";
+}
+
+var garro = new Jogador("Rodrigo Garro", 10);
+garro.MarcarGol();
+garro.MarcarGol();
+
+Console.WriteLine(garro.Resumo());</code></pre>
+        <ul class="checks">
+          <li><code>{ get; set; }</code> é uma <strong>propriedade</strong> — acesso controlado a um valor.</li>
+          <li>O construtor tem o mesmo nome da classe e não declara tipo de retorno.</li>
+          <li>Cada <code>new</code> cria um objeto independente: os gols do Garro não afetam os de outro jogador.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="6">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Com <code>new Jogador("Garro", 10)</code>, o que é criado?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Um novo molde de jogador</button>
+            <button class="opt" data-correct="true">Um objeto (instância) da classe Jogador</button>
+            <button class="opt" data-correct="false">Uma lista de jogadores</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 7 -->
+    <article class="lesson" id="l7" data-lesson="7">
+      <header class="lesson__head">
+        <span class="lesson__num">07</span>
+        <div>
+          <h3>Listas e coleções — o elenco inteiro</h3>
+          <p class="lesson__meta">List&lt;T&gt; · Add · Count · Sort</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Array tem tamanho fixo. Para elenco que cresce na janela de transferências, use <code>List&lt;T&gt;</code>.</p>
+        <pre class="code"><code class="csharp">var elenco = new List&lt;Jogador&gt;
+{
+    new Jogador("Yuri Alberto", 9)  { Gols = 17 },
+    new Jogador("Rodrigo Garro", 10) { Gols = 12 },
+    new Jogador("Róger Guedes", 11)  { Gols = 15 }
+};
+
+elenco.Add(new Jogador("Memphis", 94));
+
+int totalGols = 0;
+foreach (var j in elenco)
+{
+    totalGols += j.Gols;
+}
+
+Console.WriteLine($"Elenco: {elenco.Count} jogadores, {totalGols} gols.");
+Console.WriteLine($"Média: {(double)totalGols / elenco.Count:F1} gols por jogador.");</code></pre>
+        <ul class="checks">
+          <li><code>List&lt;Jogador&gt;</code> só aceita objetos do tipo Jogador — o compilador garante isso.</li>
+          <li><code>Count</code> é o tamanho da lista (em array é <code>Length</code>).</li>
+          <li><code>{(double)...:F1}</code> formata com uma casa decimal; o cast evita divisão inteira.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="7">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual propriedade dá o tamanho de uma <code>List&lt;T&gt;</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Length</button>
+            <button class="opt" data-correct="true">Count</button>
+            <button class="opt" data-correct="false">Size</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 8 -->
+    <article class="lesson" id="l8" data-lesson="8">
+      <header class="lesson__head">
+        <span class="lesson__num">08</span>
+        <div>
+          <h3>LINQ — consultas de campeonato</h3>
+          <p class="lesson__meta">Where · OrderBy · Select · Sum</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>LINQ transforma "percorrer e filtrar" em uma frase legível. É o recurso que mais impressiona quem vem de outra linguagem.</p>
+        <pre class="code"><code class="csharp">var artilheiros = elenco
+    .Where(j =&gt; j.Gols &gt;= 12)
+    .OrderByDescending(j =&gt; j.Gols)
+    .Select(j =&gt; $"{j.Nome}: {j.Gols}")
+    .ToList();
+
+foreach (var linha in artilheiros)
+    Console.WriteLine(linha);
+
+int golsDoTime = elenco.Sum(j =&gt; j.Gols);
+var camisa10   = elenco.FirstOrDefault(j =&gt; j.Camisa == 10);
+
+Console.WriteLine($"Total do time: {golsDoTime}");
+Console.WriteLine(camisa10 is null ? "Sem camisa 10!" : camisa10.Nome);</code></pre>
+        <ul class="checks">
+          <li><code>=&gt;</code> dentro de LINQ é uma <strong>lambda</strong>: "para cada jogador j, faça isto".</li>
+          <li><code>Where</code> filtra, <code>OrderBy</code> ordena, <code>Select</code> transforma, <code>Sum</code> soma.</li>
+          <li><code>FirstOrDefault</code> devolve <code>null</code> se não achar — sempre trate esse caso.</li>
+          <li>Precisa de <code>using System.Linq;</code> em projetos com using explícito.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="8">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que <code>.Where(j =&gt; j.Gols &gt;= 12)</code> faz?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Soma os gols dos jogadores</button>
+            <button class="opt" data-correct="true">Mantém só os jogadores com 12 gols ou mais</button>
+            <button class="opt" data-correct="false">Ordena os jogadores por gols</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- DESAFIO -->
+  <section class="wrap section" id="desafio">
+    <div class="challenge">
+      <div>
+        <p class="eyebrow">Desafio final</p>
+        <h2>Monte a tabela do Brasileirão</h2>
+        <p>Crie uma classe <code>Time</code> (nome, pontos, jogos, saldo de gols) e uma <code>List&lt;Time&gt;</code> com pelo menos seis clubes. Depois:</p>
+        <ol class="steps">
+          <li>Ordene por pontos e, no empate, por saldo de gols.</li>
+          <li>Imprima a tabela com posição, nome, pontos e saldo.</li>
+          <li>Use LINQ para mostrar só os quatro primeiros (zona da Libertadores).</li>
+          <li>Calcule o aproveitamento de cada time com o método do módulo 5.</li>
+        </ol>
+        <p class="tip">Dica de corinthiano: coloque o Timão no topo da lista inicial, mas ordene de verdade — o código não tem coração.</p>
+      </div>
+      <pre class="code"><code class="csharp">class Time
+{
+    public string Nome  { get; set; }
+    public int    Pontos { get; set; }
+    public int    Jogos  { get; set; }
+    public int    Saldo  { get; set; }
+}
+
+var tabela = new List&lt;Time&gt;
+{
+    new Time { Nome = "Corinthians", Pontos = 61, Jogos = 30, Saldo = 18 },
+    new Time { Nome = "Palmeiras",   Pontos = 58, Jogos = 30, Saldo = 22 },
+    // ... complete com os outros
+};</code></pre>
+    </div>
+  </section>
+
+  <!-- DÚVIDAS -->
+  <section class="wrap section" id="duvidas">
+    <h2 class="section__title">Dúvidas de quem está começando</h2>
+    <div class="grid grid--2">
+      <article class="card card--faq">
+        <h3>Preciso saber lógica antes?</h3>
+        <p>Não. Os módulos 1 a 4 cobrem o essencial de lógica: variáveis, condições e repetição. Se travar, refaça o exemplo digitando em vez de copiar.</p>
+      </article>
+      <article class="card card--faq">
+        <h3>Onde escrevo o código?</h3>
+        <p>Instale o <strong>.NET SDK</strong> e o <strong>VS Code</strong> com a extensão C#. Crie a pasta do projeto e rode <code>dotnet new console</code>. No Linux Mint funciona igual ao Windows.</p>
+      </article>
+      <article class="card card--faq">
+        <h3>Quanto tempo por dia?</h3>
+        <p>Um módulo por dia, com o quiz no fim, dá o básico em pouco mais de uma semana. O importante é digitar o código, quebrar e consertar.</p>
+      </article>
+      <article class="card card--faq">
+        <h3>E depois do módulo 8?</h3>
+        <p>Escolha um caminho: <strong>Unity</strong> para jogos, <strong>ASP.NET Core</strong> para APIs e web, ou <strong>console/automação</strong> para o dia a dia. Todos usam exatamente o que você viu aqui.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="reset-box">
+      <p>Terminou tudo? Seu progresso está salvo neste navegador.</p>
+      <button class="btn btn--ghost" id="reset-progress">Zerar progresso</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p><strong>Timão C#</strong> — projeto educativo independente, feito por torcedor. Sem vínculo oficial com o Sport Club Corinthians Paulista.</p>
+    <p class="foot__small">Conteúdo, código e design livres para estudo. Vai, Timão.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
