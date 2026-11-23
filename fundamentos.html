@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentos de C# — Timão C#</title>
+<meta name="description" content="Os 16 módulos de fundamentos de C#: tipos, condições, laços, métodos, classes, LINQ, exceções, JSON, generics, async e testes.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' fill='%23fff' text-anchor='middle'%3EC%23%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip" href="#l1">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="index.html">
+      <span class="brand__crest" aria-hidden="true">C#</span>
+      <span class="brand__txt">Timão<strong>C#</strong></span>
+    </a>
+    <nav class="nav" aria-label="Trilhas">
+      <a href="index.html">Início</a>
+      <a href="fundamentos.html" aria-current="page">Fundamentos</a>
+      <a href="games.html">Games</a>
+      <a href="web.html">Web</a>
+      <a href="automacao.html">Automação</a>
+    </nav>
+    <div class="progress" title="Seu progresso no site inteiro">
+      <div class="progress__bar"><span id="progress-fill" style="width:0%"></span></div>
+      <span class="progress__label" id="progress-label">0/26</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="pagehead">
+    <div class="wrap">
+      <p class="crumb"><a href="index.html">Início</a> / Fundamentos</p>
+      <h1>Trilha de fundamentos</h1>
+      <p class="lead lead--tight">
+        Dezesseis módulos que cobrem a linguagem de ponta a ponta: do primeiro <code>Console.WriteLine</code>
+        até async/await e testes automatizados. Faça na ordem — cada módulo usa o anterior.
+      </p>
+      <ol class="toc" aria-label="Índice dos módulos">
+        <li><a href="#l1">Olá, Timão — primeiro programa</a></li>
+        <li><a href="#l2">Variáveis, tipos e conversões</a></li>
+        <li><a href="#l3">Condições e decisões</a></li>
+        <li><a href="#l4">Repetição e arrays</a></li>
+        <li><a href="#l5">Métodos e parâmetros</a></li>
+        <li><a href="#l6">Classes, objetos e propriedades</a></li>
+        <li><a href="#l7">Listas e coleções básicas</a></li>
+        <li><a href="#l8">LINQ — consultas</a></li>
+        <li><a href="#l9">Exceções — try/catch</a></li>
+        <li><a href="#l10">Arquivos e JSON</a></li>
+        <li><a href="#l11">Enums, structs, records e nullable</a></li>
+        <li><a href="#l12">Herança, interfaces e polimorfismo</a></li>
+        <li><a href="#l13">Generics e coleções avançadas</a></li>
+        <li><a href="#l14">Delegates, eventos e lambdas</a></li>
+        <li><a href="#l15">Async, await e threads</a></li>
+        <li><a href="#l16">Testes, GC e boas práticas</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap section">
+
+    <!-- 01 -->
+    <article class="lesson" id="l1" data-lesson="f1">
+      <header class="lesson__head">
+        <span class="lesson__num">01</span>
+        <div>
+          <h3>Olá, Timão — seu primeiro programa</h3>
+          <p class="lesson__meta">estrutura · Console · interpolação · como o C# roda</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Todo programa C# vive dentro de uma <strong>classe</strong> e começa no método <code>Main</code>. Desde o C# 9 existe o formato <em>top-level statements</em>: você escreve as instruções soltas no arquivo e o compilador gera a classe e o <code>Main</code> para você. É o formato dos exemplos deste site.</p>
+        <pre class="code"><code class="csharp">// Programa.cs — o arquivo mais simples que existe
+Console.WriteLine("Vai, Timão!");
+Console.WriteLine("Aprender C# é igual subir a Vila: no começo cansa.");
+
+int gols = 3;
+Console.WriteLine($"Placar: Corinthians {gols} x 0");
+
+// O mesmo programa no formato "clássico", com classe e Main:
+class Programa
+{
+    static void Main()
+    {
+        Console.WriteLine("Também funciona assim.");
+    }
+}</code></pre>
+        <ul class="checks">
+          <li><code>Console.WriteLine</code> escreve uma linha no terminal; <code>Console.Write</code> não pula linha.</li>
+          <li>O <code>$</code> antes das aspas liga a <strong>interpolação</strong>: <code>{gols}</code> vira o valor da variável.</li>
+          <li>Cada instrução termina em <code>;</code>. Esquecer o ponto e vírgula é o erro nº 1 de quem começa.</li>
+          <li><code>//</code> é comentário de linha; <code>/* ... */</code> comenta um bloco.</li>
+          <li>O C# não é interpretado direto: ele compila para <strong>IL</strong> (uma linguagem intermediária) e o <strong>CLR</strong> executa com JIT em tempo de execução. Por isso é rápido e ainda assim portátil.</li>
+        </ul>
+        <p class="tip">Para rodar de verdade: instale o .NET SDK, crie o projeto com <code>dotnet new console -o Timao</code> e execute <code>dotnet run</code> dentro da pasta. O arquivo gerado é o <code>Program.cs</code>.</p>
+
+        <div class="quiz" data-quiz="f1">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que o <code>$</code> faz em <code>$"Corinthians {gols}"</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Converte o texto em número</button>
+            <button class="opt" data-correct="true">Permite inserir variáveis dentro do texto</button>
+            <button class="opt" data-correct="false">Indica que a linha é um comentário</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02 -->
+    <article class="lesson" id="l2" data-lesson="f2">
+      <header class="lesson__head">
+        <span class="lesson__num">02</span>
+        <div>
+          <h3>Variáveis, tipos e conversões</h3>
+          <p class="lesson__meta">int · double · decimal · string · bool · var · parse</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Cada informação tem um <strong>tipo</strong>, e o tipo decide o que você pode fazer com ela. C# é <em>fortemente tipada</em>: o compilador recusa misturar coisas incompatíveis antes mesmo de rodar.</p>
+        <pre class="code"><code class="csharp">string nome    = "Yuri Alberto";   // texto (referência)
+int    camisa  = 9;                // inteiro de 32 bits
+double altura  = 1.82;             // ponto flutuante (aproximado)
+decimal salario = 1250000.50m;     // dinheiro: precisão exata (sufixo m)
+bool   titular = true;             // verdadeiro/falso
+char   posicao = 'A';              // um único caractere
+var    gols    = 17;               // o compilador deduz int
+
+const int LIMITE_DE_GOLS = 100;    // constante: não muda nunca
+
+// conversões
+int textoParaNumero = int.Parse("10");
+bool deuCerto = int.TryParse("dez", out int valor);   // não lança exceção
+
+double media = (double)gols / 30;  // cast: evita divisão inteira
+
+Console.WriteLine($"{nome} ({camisa}) tem {altura}m e {gols} gols.");</code></pre>
+        <ul class="checks">
+          <li><code>int</code>, <code>long</code>, <code>short</code>, <code>byte</code> = inteiros de tamanhos diferentes.</li>
+          <li><code>double</code> é rápido e aproximado; <code>decimal</code> é exato e usado para dinheiro. Nunca use <code>double</code> para valores financeiros.</li>
+          <li><code>var</code> não significa "sem tipo": o tipo é fixado na atribuição e não muda depois.</li>
+          <li>Em C# o separador decimal é <strong>ponto</strong>. <code>1,82</code> não compila.</li>
+          <li><strong>Tipos de valor</strong> (<code>int</code>, <code>double</code>, <code>bool</code>, <code>struct</code>) copiam o conteúdo; <strong>tipos de referência</strong> (<code>string</code>, classes) copiam o endereço do objeto.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f2">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual tipo guarda a altura de um jogador como 1.82?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">int</button>
+            <button class="opt" data-correct="true">double</button>
+            <button class="opt" data-correct="false">bool</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 03 -->
+    <article class="lesson" id="l3" data-lesson="f3">
+      <header class="lesson__head">
+        <span class="lesson__num">03</span>
+        <div>
+          <h3>Condições — vitória, empate ou derrota</h3>
+          <p class="lesson__meta">if/else · switch · ternário · operadores</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Programa é decisão. Com <code>if</code> você escolhe um caminho conforme uma condição booleana — e o C# exige que essa condição seja de fato <code>bool</code> (nada de "0 é falso" como em C).</p>
+        <pre class="code"><code class="csharp">int corinthians = 2;
+int adversario  = 1;
+
+if (corinthians &gt; adversario)
+{
+    Console.WriteLine("Vitória! Três pontos no bolso.");
+}
+else if (corinthians == adversario)
+{
+    Console.WriteLine("Empate. Um ponto e muita reclamação da arbitragem.");
+}
+else
+{
+    Console.WriteLine("Derrota. Semana de silêncio no grupo.");
+}
+
+// operador ternário: if/else curto em uma linha
+string clima = corinthians &gt; adversario ? "festa" : "cobrança";
+
+// switch em instrução
+char resultado = 'V';
+switch (resultado)
+{
+    case 'V': Console.WriteLine("3 pontos"); break;
+    case 'E': Console.WriteLine("1 ponto");  break;
+    case 'D': Console.WriteLine("0 ponto");  break;
+    default:  Console.WriteLine("Rodada não jogada"); break;
+}
+
+// switch expression (mais moderno, devolve valor)
+string premio = resultado switch
+{
+    'V' =&gt; "festa no vestiário",
+    'E' =&gt; "quase lá",
+    'D' =&gt; "reunião de emergência",
+    _   =&gt; "sem jogo"
+};</code></pre>
+        <ul class="checks">
+          <li>Igualdade é <code>==</code>; um <code>=</code> só é atribuição.</li>
+          <li>Lógicos: <code>&amp;&amp;</code> (e), <code>||</code> (ou), <code>!</code> (não). Em cadeias longas, use parênteses para deixar claro.</li>
+          <li><code>&&</code> e <code>||</code> fazem <em>curto-circuito</em>: se o primeiro já decide, o segundo nem é avaliado.</li>
+          <li><code>switch expression</code> devolve valor e o <code>_</code> é o caso padrão.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f3">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Como testar se dois placares são iguais?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">if (a = b)</button>
+            <button class="opt" data-correct="true">if (a == b)</button>
+            <button class="opt" data-correct="false">if (a equals b)</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 04 -->
+    <article class="lesson" id="l4" data-lesson="f4">
+      <header class="lesson__head">
+        <span class="lesson__num">04</span>
+        <div>
+          <h3>Repetição e arrays — escalando os 11</h3>
+          <p class="lesson__meta">for · while · do/while · foreach · break/continue</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Quando algo se repete, você usa laço. <code>for</code> quando sabe quantas vezes, <code>foreach</code> para percorrer coleções, <code>while</code> enquanto a condição valer e <code>do/while</code> quando precisa rodar pelo menos uma vez.</p>
+        <pre class="code"><code class="csharp">string[] escalacao =
+{
+    "Hugo Souza", "Fagner", "Gil", "Cássio", "Fábio Santos",
+    "Roni", "Renato Augusto", "Rodrigo Garro",
+    "Yuri Alberto", "Róger Guedes", "Gustavo Mosquito"
+};
+
+for (int i = 0; i &lt; escalacao.Length; i++)
+{
+    Console.WriteLine($"{i + 1}. {escalacao[i]}");
+}
+
+foreach (string jogador in escalacao)
+{
+    if (jogador == "Cássio") continue;   // pula este
+    if (jogador == "Roni") break;        // encerra o laço
+    Console.WriteLine(jogador);
+}
+
+int rodadas = 1;
+while (rodadas &lt;= 38)
+{
+    rodadas++;               // 38 rodadas de Brasileirão
+}
+
+// matriz: tabela com linhas e colunas
+int[,] jogosPorMes = { { 4, 5 }, { 6, 4 } };
+Console.WriteLine(jogosPorMes[0, 1]);   // 5</code></pre>
+        <ul class="checks">
+          <li>Índices começam em <strong>0</strong>: o primeiro jogador é <code>escalacao[0]</code>.</li>
+          <li><code>Length</code> evita estourar o índice. Nunca escreva <code>i &lt;= Length</code>.</li>
+          <li><code>break</code> sai do laço; <code>continue</code> pula para a volta seguinte.</li>
+          <li><code>foreach</code> não deixa alterar o item durante a iteração — para modificar, use <code>for</code> ou reconstrua a coleção.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f4">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual é o índice do primeiro item de um array?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">0</button>
+            <button class="opt" data-correct="false">1</button>
+            <button class="opt" data-correct="false">Depende do tamanho</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 05 -->
+    <article class="lesson" id="l5" data-lesson="f5">
+      <header class="lesson__head">
+        <span class="lesson__num">05</span>
+        <div>
+          <h3>Métodos e parâmetros</h3>
+          <p class="lesson__meta">retorno · ref/out · opcionais · sobrecarga</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Método é um bloco com nome que recebe dados (parâmetros) e devolve um resultado. Serve para não repetir cálculo e para dar nome às regras do jogo.</p>
+        <pre class="code"><code class="csharp">int Aproveitamento(int pontos, int jogos)
+{
+    if (jogos == 0) return 0;
+    return pontos * 100 / (jogos * 3);   // % dos pontos possíveis
+}
+
+// expression-bodied: atalho para corpo de uma linha
+string Situacao(int aprov) =&gt; aprov switch
+{
+    &gt;= 70 =&gt; "brigando pelo título",
+    &gt;= 45 =&gt; "no meio da tabela",
+    _      =&gt; "brigando embaixo"
+};
+
+// parâmetro opcional com valor padrão
+void Anunciar(string time, string estadio = "Neo Química Arena") =&gt;
+    Console.WriteLine($"{time} joga na {estadio}");
+
+// sobrecarga: mesmo nome, assinaturas diferentes
+int Somar(int a, int b) =&gt; a + b;
+double Somar(double a, double b) =&gt; a + b;
+
+// out: devolve mais de um valor pelo parâmetro
+bool TentarMarcar(int chance, out string narracao)
+{
+    if (chance &gt; 50) { narracao = "GOOOL!"; return true; }
+    narracao = "pra fora";
+    return false;
+}
+
+int aprov = Aproveitamento(pontos: 61, jogos: 30);   // argumentos nomeados
+TentarMarcar(70, out string grito);</code></pre>
+        <ul class="checks">
+          <li><code>return</code> encerra o método e entrega o valor; métodos sem retorno usam <code>void</code>.</li>
+          <li><code>ref</code> permite alterar a variável original; <code>out</code> serve para devolver um valor extra (o método é obrigado a atribuí-lo).</li>
+          <li>Sobrecarga = mesmo nome com parâmetros diferentes; o compilador escolhe pela assinatura.</li>
+          <li>Argumentos nomeados (<code>pontos: 61</code>) deixam a chamada legível e dispensam lembrar a ordem.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f5">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que <code>return</code> faz dentro de um método?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Reinicia o método</button>
+            <button class="opt" data-correct="true">Encerra o método devolvendo um valor</button>
+            <button class="opt" data-correct="false">Imprime o valor na tela</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 06 -->
+    <article class="lesson" id="l6" data-lesson="f6">
+      <header class="lesson__head">
+        <span class="lesson__num">06</span>
+        <div>
+          <h3>Classes, objetos e propriedades</h3>
+          <p class="lesson__meta">construtor · get/set · static · this</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p><strong>Classe</strong> é o molde; <strong>objeto</strong> é cada jogador concreto criado a partir dele. É a base da orientação a objetos e o que você vai usar todo dia.</p>
+        <pre class="code"><code class="csharp">class Jogador
+{
+    // propriedade com validação no set
+    private int gols;
+    public int Gols
+    {
+        get =&gt; gols;
+        set =&gt; gols = value &lt; 0 ? 0 : value;
+    }
+
+    public string Nome   { get; set; }
+    public int    Camisa { get; init; }      // só define na criação
+    public bool   Titular { get; private set; } = true;
+
+    public static int TotalCriados { get; private set; }  // pertence à classe
+
+    public Jogador(string nome, int camisa)
+    {
+        Nome   = nome;
+        Camisa = camisa;
+        TotalCriados++;
+    }
+
+    public void MarcarGol() =&gt; Gols++;
+
+    public string Resumo() =&gt; $"#{Camisa} {Nome} — {Gols} gols";
+}
+
+var garro = new Jogador("Rodrigo Garro", 10);
+garro.MarcarGol();
+garro.Gols = -5;                     // vira 0 pela validação
+Console.WriteLine(garro.Resumo());
+Console.WriteLine($"Jogadores criados: {Jogador.TotalCriados}");</code></pre>
+        <ul class="checks">
+          <li><code>{ get; set; }</code> é propriedade automática; <code>get =&gt; ...</code> / <code>set =&gt; ...</code> permitem lógica.</li>
+          <li><code>init</code> deixa definir só no <code>new</code>; <code>private set</code> deixa ler de fora e alterar só por dentro.</li>
+          <li><code>static</code> pertence à classe, não ao objeto — acessado como <code>Jogador.TotalCriados</code>.</li>
+          <li>O construtor tem o mesmo nome da classe e não declara retorno.</li>
+          <li><code>this</code> é a referência ao próprio objeto (útil quando o parâmetro tem o mesmo nome do campo).</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f6">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Com <code>new Jogador("Garro", 10)</code>, o que é criado?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Um novo molde de jogador</button>
+            <button class="opt" data-correct="true">Um objeto (instância) da classe Jogador</button>
+            <button class="opt" data-correct="false">Uma lista de jogadores</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 07 -->
+    <article class="lesson" id="l7" data-lesson="f7">
+      <header class="lesson__head">
+        <span class="lesson__num">07</span>
+        <div>
+          <h3>Listas e coleções básicas</h3>
+          <p class="lesson__meta">List&lt;T&gt; · Add/Remove · Count · Sort</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Array tem tamanho fixo. Para elenco que cresce na janela de transferências, use <code>List&lt;T&gt;</code> — ela cresce sozinha.</p>
+        <pre class="code"><code class="csharp">var elenco = new List&lt;Jogador&gt;
+{
+    new Jogador("Yuri Alberto", 9)  { Gols = 17 },
+    new Jogador("Rodrigo Garro", 10) { Gols = 12 },
+    new Jogador("Róger Guedes", 11)  { Gols = 15 }
+};
+
+elenco.Add(new Jogador("Memphis", 94));
+elenco.RemoveAll(j =&gt; j.Gols == 0);
+
+int totalGols = 0;
+foreach (var j in elenco) totalGols += j.Gols;
+
+// ordenar com comparação personalizada
+elenco.Sort((a, b) =&gt; b.Gols.CompareTo(a.Gols));
+
+Console.WriteLine($"Elenco: {elenco.Count} jogadores, {totalGols} gols.");
+Console.WriteLine($"Média: {(double)totalGols / elenco.Count:F1} gols por jogador.");
+Console.WriteLine($"Artilheiro: {elenco[0].Nome}");</code></pre>
+        <ul class="checks">
+          <li><code>List&lt;Jogador&gt;</code> só aceita objetos do tipo Jogador — o compilador garante.</li>
+          <li><code>Count</code> é o tamanho da lista; em array é <code>Length</code>.</li>
+          <li><code>{(double)...:F1}</code> formata com uma casa decimal; o cast evita divisão inteira.</li>
+          <li><code>Sort</code> recebe uma função de comparação: negativo = <code>a</code> antes, positivo = <code>b</code> antes.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f7">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual propriedade dá o tamanho de uma <code>List&lt;T&gt;</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Length</button>
+            <button class="opt" data-correct="true">Count</button>
+            <button class="opt" data-correct="false">Size</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 08 -->
+    <article class="lesson" id="l8" data-lesson="f8">
+      <header class="lesson__head">
+        <span class="lesson__num">08</span>
+        <div>
+          <h3>LINQ — consultas de campeonato</h3>
+          <p class="lesson__meta">Where · OrderBy · Select · GroupBy · Sum</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>LINQ transforma "percorrer e filtrar" em uma frase legível. Funciona em listas, arrays, XML, banco de dados (via EF Core) e qualquer coisa que implemente <code>IEnumerable&lt;T&gt;</code>.</p>
+        <pre class="code"><code class="csharp">var artilheiros = elenco
+    .Where(j =&gt; j.Gols &gt;= 12)
+    .OrderByDescending(j =&gt; j.Gols)
+    .Select(j =&gt; $"{j.Nome}: {j.Gols}")
+    .ToList();
+
+int golsDoTime = elenco.Sum(j =&gt; j.Gols);
+var camisa10   = elenco.FirstOrDefault(j =&gt; j.Camisa == 10);
+bool temArtilheiro = elenco.Any(j =&gt; j.Gols &gt; 20);
+
+var porPosicao = elenco
+    .GroupBy(j =&gt; j.Posicao)
+    .Select(g =&gt; new { Posicao = g.Key, Total = g.Count() });
+
+Console.WriteLine($"Total do time: {golsDoTime}");
+Console.WriteLine(camisa10 is null ? "Sem camisa 10!" : camisa10.Nome);</code></pre>
+        <ul class="checks">
+          <li><code>=&gt;</code> dentro de LINQ é uma <strong>lambda</strong>: "para cada jogador j, faça isto".</li>
+          <li><code>Where</code> filtra, <code>OrderBy</code> ordena, <code>Select</code> transforma, <code>Sum</code> soma, <code>Any</code> responde sim/não.</li>
+          <li><code>FirstOrDefault</code> devolve <code>null</code> se não achar — trate sempre esse caso.</li>
+          <li>A consulta é <strong>preguiçosa</strong> (deferred): só executa quando você itera ou chama <code>ToList</code>/<code>Count</code>.</li>
+          <li>Precisa de <code>using System.Linq;</code> em projetos com using explícito.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f8">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que <code>.Where(j =&gt; j.Gols &gt;= 12)</code> faz?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Soma os gols dos jogadores</button>
+            <button class="opt" data-correct="true">Mantém só os jogadores com 12 gols ou mais</button>
+            <button class="opt" data-correct="false">Ordena os jogadores por gols</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 09 -->
+    <article class="lesson" id="l9" data-lesson="f9">
+      <header class="lesson__head">
+        <span class="lesson__num">09</span>
+        <div>
+          <h3>Exceções — quando algo dá errado</h3>
+          <p class="lesson__meta">try · catch · finally · throw · exceção personalizada</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Nem tudo sai como o planejado: o arquivo não existe, o usuário digita "dez" onde era para digitar 10, o servidor cai. Em vez de retornar códigos de erro, o C# usa <strong>exceções</strong>: o problema sobe pela pilha de chamadas até alguém tratar. Se ninguém tratar, o programa encerra com um <em>stack trace</em>.</p>
+        <p>Exceções em C# são <strong>objetos</strong>. Toda exceção herda de <code>System.Exception</code>, e cada tipo carrega um significado: <code>FormatException</code> (texto em formato inválido), <code>FileNotFoundException</code>, <code>NullReferenceException</code>, <code>DivideByZeroException</code>, <code>ArgumentException</code>, <code>InvalidOperationException</code>.</p>
+        <pre class="code"><code class="csharp">int CalcularAproveitamento(int pontos, int jogos)
+{
+    if (jogos &lt;= 0)
+        throw new ArgumentException("Jogos deve ser maior que zero.", nameof(jogos));
+
+    return pontos * 100 / (jogos * 3);
+}
+
+string LerPlacar(string entrada)
+{
+    try
+    {
+        int gols = int.Parse(entrada);          // pode lançar FormatException
+        return $"Placar registrado: {gols} gols";
+    }
+    catch (FormatException ex)
+    {
+        // ex.Message explica; ex.StackTrace mostra o caminho
+        return $"Não entendi o placar: {ex.Message}";
+    }
+    catch (OverflowException)
+    {
+        return "Número grande demais.";
+    }
+    finally
+    {
+        // roda sempre: deu certo, deu erro ou houve return
+        Console.WriteLine("Tentativa de leitura encerrada.");
+    }
+}
+
+// filtro de exceção (when): só trata em certas condições
+try { CalcularAproveitamento(10, 0); }
+catch (ArgumentException ex) when (ex.ParamName == "jogos")
+{
+    Console.WriteLine("Ajuste o número de jogos.");
+}
+
+// exceção personalizada, com dados do domínio
+try
+{
+    throw new JogoCanceladoException("Clássico", "chuva forte");
+}
+catch (JogoCanceladoException ex)
+{
+    Console.WriteLine($"{ex.Message} Motivo: {ex.Motivo}");
+}
+
+class JogoCanceladoException : Exception
+{
+    public string Motivo { get; }
+
+    public JogoCanceladoException(string jogo, string motivo)
+        : base($"O jogo {jogo} foi cancelado.")
+    {
+        Motivo = motivo;
+    }
+}</code></pre>
+        <ul class="checks">
+          <li><code>try</code> envolve o código perigoso; <code>catch</code> trata; <code>finally</code> sempre executa (fechar arquivo, liberar conexão).</li>
+          <li>Capture a exceção <strong>mais específica primeiro</strong>: <code>FormatException</code> antes de <code>Exception</code>.</li>
+          <li><code>throw</code> cria o problema; <code>throw;</code> (sem objeto) relança preservando o stack trace original — nunca faça <code>throw ex;</code>.</li>
+          <li>Use <code>nameof(x)</code> para citar o parâmetro e <code>ex.Message</code> para a mensagem — mas não mostre stack trace cru ao usuário final.</li>
+          <li><strong>Não engula exceções</strong> com <code>catch { }</code> vazio: você esconde o bug. Trate, registre (log) ou deixe subir.</li>
+          <li>Exceção é para o <em>excepcional</em>. Validação previsível (campo vazio, número inválido) costuma ser melhor com <code>TryParse</code>/<code>bool</code> de retorno.</li>
+        </ul>
+        <p class="tip">Custo: lançar exceção é caro (captura o stack). Em laço de milhares de itens, prefira <code>int.TryParse</code> e validações a <code>try/catch</code> por item.</p>
+
+        <div class="quiz" data-quiz="f9">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Em <code>try / catch / finally</code>, quando o bloco <code>finally</code> executa?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Só quando o try funciona</button>
+            <button class="opt" data-correct="true">Sempre, com ou sem exceção</button>
+            <button class="opt" data-correct="false">Só quando há exceção não tratada</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 10 -->
+    <article class="lesson" id="l10" data-lesson="f10">
+      <header class="lesson__head">
+        <span class="lesson__num">10</span>
+        <div>
+          <h3>Arquivos e JSON — salvando o campeonato</h3>
+          <p class="lesson__meta">File · Path · JsonSerializer · desserializar</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Até aqui tudo vivia na memória: fechou o programa, perdeu o elenco. Para guardar dados de verdade, as duas ferramentas do dia a dia são <strong>arquivos</strong> (<code>System.IO.File</code>) e <strong>JSON</strong> (<code>System.Text.Json</code>, já embutido no .NET).</p>
+        <pre class="code"><code class="csharp">using System.Text.Json;
+
+class Time
+{
+    public string Nome   { get; set; } = "";
+    public int    Pontos { get; set; }
+    public int    Jogos  { get; set; }
+    public int    Saldo  { get; set; }
+}
+
+var tabela = new List&lt;Time&gt;
+{
+    new() { Nome = "Corinthians", Pontos = 61, Jogos = 30, Saldo = 18 },
+    new() { Nome = "Palmeiras",   Pontos = 58, Jogos = 30, Saldo = 22 }
+};
+
+// monta caminho que funciona em Linux e Windows
+string pasta = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Timao");
+Directory.CreateDirectory(pasta);                 // não reclama se já existe
+string caminho = Path.Combine(pasta, "tabela.json");
+
+// ---------- gravar ----------
+var opcoes = new JsonSerializerOptions
+{
+    WriteIndented = true,                          // JSON legível
+    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+};
+string json = JsonSerializer.Serialize(tabela, opcoes);
+File.WriteAllText(caminho, json);                  // sobrescreve / cria
+
+// ---------- ler ----------
+try
+{
+    if (File.Exists(caminho))
+    {
+        string conteudo = File.ReadAllText(caminho);
+        var carregado = JsonSerializer.Deserialize&lt;List&lt;Time&gt;&gt;(conteudo);
+
+        foreach (var t in carregado ?? new List&lt;Time&gt;())
+            Console.WriteLine($"{t.Nome}: {t.Pontos} pts (saldo {t.Saldo})");
+    }
+}
+catch (JsonException ex)
+{
+    Console.WriteLine($"JSON inválido: {ex.Message}");
+}
+catch (IOException ex)
+{
+    Console.WriteLine($"Falha de disco: {ex.Message}");
+}
+
+// acrescentar uma linha sem reescrever tudo
+File.AppendAllText(caminho, Environment.NewLine + "// fim");</code></pre>
+        <ul class="checks">
+          <li><code>File.WriteAllText</code> / <code>ReadAllText</code> resolvem 90% dos casos; <code>AppendAllText</code> acrescenta.</li>
+          <li><code>Path.Combine</code> monta caminhos corretos no Linux e no Windows — nunca concatene com "/".</li>
+          <li>Nome de propriedade vira chave do JSON. Para renomear, use <code>[JsonPropertyName("nome")]</code>.</li>
+          <li>Para <code>Deserialize</code> funcionar, a classe precisa de propriedades públicas com <code>get</code>/<code>set</code> (ou construtor compatível).</li>
+          <li>Sempre trate <code>IOException</code> (disco cheio, arquivo em uso) e <code>JsonException</code> (arquivo corrompido ou editado à mão).</li>
+          <li>JSON não guarda tipos: números viram <code>double</code> na desserialização — use <code>int</code>/<code>long</code> nas propriedades para o conversor ajustar.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f10">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual método grava um texto em arquivo, criando ou sobrescrevendo?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">File.AppendAllText</button>
+            <button class="opt" data-correct="true">File.WriteAllText</button>
+            <button class="opt" data-correct="false">File.ReadAllText</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 11 -->
+    <article class="lesson" id="l11" data-lesson="f11">
+      <header class="lesson__head">
+        <span class="lesson__num">11</span>
+        <div>
+          <h3>Enums, structs, records e nullable</h3>
+          <p class="lesson__meta">enum · record · struct · ? · ?? · pattern matching</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Além de classes, o C# tem tipos feitos para casos específicos: <code>enum</code> para conjuntos fixos de opções, <code>struct</code> para valores pequenos, <code>record</code> para dados imutáveis com igualdade por conteúdo — e <code>nullable</code> para representar "pode não ter valor".</p>
+        <pre class="code"><code class="csharp">enum Posicao { Goleiro, Zagueiro, Lateral, Meia, Atacante }
+
+// record: igualdade por valor, ToString pronto, imutável por padrão
+record Jogador(string Nome, int Camisa, Posicao Posicao, int Gols = 0)
+{
+    public bool Artilheiro =&gt; Gols &gt;= 15;
+}
+
+var g10 = new Jogador("Rodrigo Garro", 10, Posicao.Meia, 12);
+var outro = g10 with { Gols = 18 };          // cópia alterando um campo
+Console.WriteLine(g10 == outro);              // False: valores diferentes
+
+// struct: tipo de valor, boa para dados pequenos
+struct Coordenada
+{
+    public int X { get; init; }
+    public int Y { get; init; }
+}
+
+// nullable: o "talvez" do C#
+Jogador? camisa10 = null;
+int? gols = null;
+
+Console.WriteLine(camisa10?.Nome ?? "Nenhum camisa 10 definido");
+Console.WriteLine(gols.HasValue ? gols.Value.ToString() : "sem dados");
+
+// pattern matching
+string Classificar(Jogador j) =&gt; j switch
+{
+    { Gols: &gt;= 20 } =&gt; "artilheiro do campeonato",
+    { Posicao: Posicao.Goleiro } =&gt; "defende o gol",
+    { Gols: 0 } =&gt; "ainda não marcou",
+    _ =&gt; "jogador comum"
+};</code></pre>
+        <ul class="checks">
+          <li><code>enum</code> dá nomes a números e impede valores fora da lista; por baixo, é um inteiro.</li>
+          <li><code>record</code> compara por <strong>valor</strong> (não por referência) e o <code>with</code> cria cópia alterando campos.</li>
+          <li><code>struct</code> é tipo de valor e vive na pilha: use para dados pequenos e curtos, como coordenadas. Struct grande copia muito e custa caro.</li>
+          <li><code>?</code> marca "pode ser null"; <code>?.</code> só acessa se não for null; <code>??</code> dá o valor alternativo.</li>
+          <li><code>Nullable Reference Types</code> (ligado por padrão em projetos novos) faz o compilador avisar sobre possíveis <code>NullReferenceException</code>.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f11">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que o <code>??</code> faz em <code>nome ?? "sem nome"</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">Devolve o lado direito se o esquerdo for null</button>
+            <button class="opt" data-correct="false">Compara dois textos</button>
+            <button class="opt" data-correct="false">Converte o texto em número</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 12 -->
+    <article class="lesson" id="l12" data-lesson="f12">
+      <header class="lesson__head">
+        <span class="lesson__num">12</span>
+        <div>
+          <h3>Herança, interfaces e polimorfismo</h3>
+          <p class="lesson__meta">abstract · virtual/override · interface · composição</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Herança reaproveita comportamento: <code>Jogador</code> e <code>ComissaoTecnica</code> são <code>Pessoa</code>. Interfaces definem <em>contratos</em>: quem assina, promete implementar. Polimorfismo é a consequência: você chama o mesmo método e cada tipo responde do seu jeito.</p>
+        <pre class="code"><code class="csharp">abstract class Pessoa
+{
+    public string Nome { get; init; } = "";
+
+    // método abstrato: cada filho é obrigado a implementar
+    public abstract string Funcao();
+
+    // virtual: tem implementação, pode ser sobrescrito
+    public virtual string Apresentacao() =&gt; $"{Nome} — {Funcao()}";
+}
+
+interface IPagavel
+{
+    decimal Salario { get; }
+    decimal CalcularPagamento(int meses);
+}
+
+class Jogador : Pessoa, IPagavel
+{
+    public int Camisa { get; init; }
+    public decimal Salario { get; init; }
+
+    public override string Funcao() =&gt; $"camisa {Camisa}";
+
+    public override string Apresentacao() =&gt;
+        base.Apresentacao() + " (profissional)";
+
+    public decimal CalcularPagamento(int meses) =&gt; Salario * meses;
+}
+
+class Tecnico : Pessoa, IPagavel
+{
+    public decimal Salario { get; init; }
+    public override string Funcao() =&gt; "técnico";
+    public decimal CalcularPagamento(int meses) =&gt; Salario * meses * 1.2m;
+}
+
+var elenco = new List&lt;Pessoa&gt;
+{
+    new Jogador { Nome = "Garro", Camisa = 10 },
+    new Tecnico { Nome = "Dorival" }
+};
+
+foreach (var p in elenco)
+    Console.WriteLine(p.Apresentacao());   // cada um responde do seu jeito
+
+// polimorfismo via interface
+foreach (var pagavel in elenco.OfType&lt;IPagavel&gt;())
+    Console.WriteLine(pagavel.CalcularPagamento(12));</code></pre>
+        <ul class="checks">
+          <li><code>abstract</code> não pode ser instanciado; serve de base obrigatória.</li>
+          <li><code>virtual</code> permite sobrescrever; <code>override</code> faz a sobrescrita; <code>base.Metodo()</code> chama a versão do pai.</li>
+          <li>Uma classe herda de <strong>uma</strong> classe, mas implementa <strong>várias</strong> interfaces.</li>
+          <li>Prefira <strong>composição</strong> (um objeto tem outro) a herança profunda — herança é acoplamento forte.</li>
+          <li>Interfaces deixam o código testável: você troca a implementação real por uma falsa no teste.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f12">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Quantas interfaces uma classe C# pode implementar?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Apenas uma</button>
+            <button class="opt" data-correct="true">Quantas quiser</button>
+            <button class="opt" data-correct="false">No máximo duas</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 13 -->
+    <article class="lesson" id="l13" data-lesson="f13">
+      <header class="lesson__head">
+        <span class="lesson__num">13</span>
+        <div>
+          <h3>Generics e coleções avançadas</h3>
+          <p class="lesson__meta">T · constraints · Dictionary · HashSet · Queue · Stack</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p><code>List&lt;Jogador&gt;</code> já é generic: o <code>&lt;T&gt;</code> é o tipo que você escolhe. Com generics você escreve código uma vez e ele funciona para qualquer tipo, com verificação em tempo de compilação e sem conversões arriscadas.</p>
+        <pre class="code"><code class="csharp">// método genérico com restrição: T precisa ter construtor sem parâmetros
+T CriarPadrao&lt;T&gt;() where T : new() =&gt; new T();
+
+// classe genérica com duas restrições
+class Repositorio&lt;T&gt; where T : class, IIdentificavel
+{
+    private readonly List&lt;T&gt; itens = new();
+    public void Adicionar(T item) =&gt; itens.Add(item);
+    public T? BuscarPorId(int id) =&gt; itens.FirstOrDefault(i =&gt; i.Id == id);
+    public int Total =&gt; itens.Count;
+}
+
+interface IIdentificavel { int Id { get; } }
+
+// ---------- coleções por caso de uso ----------
+
+// Dictionary: busca por chave, O(1)
+var golsPorJogador = new Dictionary&lt;string, int&gt;
+{
+    ["Yuri Alberto"] = 17,
+    ["Garro"] = 12
+};
+golsPorJogador["Róger Guedes"] = 15;
+
+if (golsPorJogador.TryGetValue("Garro", out int gols))
+    Console.WriteLine($"Garro tem {gols} gols");
+
+// HashSet: sem duplicatas, testa existência rápido
+var convocados = new HashSet&lt;string&gt; { "Garro", "Yuri" };
+convocados.Add("Garro");                // ignorado, já existe
+bool estaNaLista = convocados.Contains("Yuri");
+
+// Queue (fila) e Stack (pilha)
+var fila = new Queue&lt;string&gt;();        // FIFO: primeiro a entrar, primeiro a sair
+fila.Enqueue("entrevista");
+fila.Enqueue("exame médico");
+string proximo = fila.Dequeue();
+
+var pilha = new Stack&lt;string&gt;();       // LIFO: último a entrar, primeiro a sair
+pilha.Push("base");
+pilha.Push("topo");
+string topo = pilha.Pop();</code></pre>
+        <ul class="checks">
+          <li><code>&lt;T&gt;</code> pode ser qualquer nome, mas <code>T</code> é a convenção.</li>
+          <li>Restrições (<code>where</code>): <code>class</code>, <code>struct</code>, <code>new()</code>, <code>IInterface</code>, <code>notnull</code>.</li>
+          <li><code>Dictionary</code> = chave/valor; <code>HashSet</code> = conjunto único; <code>Queue</code> = fila; <code>Stack</code> = pilha.</li>
+          <li>Acessar <code>dict[chaveInexistente]</code> lança exceção; use <code>TryGetValue</code> ou <code>GetValueOrDefault</code>.</li>
+          <li>Escolher a coleção certa é metade da performance: busca por chave em lista é O(n), em dicionário é O(1).</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f13">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual coleção garante que não haja itens repetidos?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">List&lt;T&gt;</button>
+            <button class="opt" data-correct="true">HashSet&lt;T&gt;</button>
+            <button class="opt" data-correct="false">Queue&lt;T&gt;</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 14 -->
+    <article class="lesson" id="l14" data-lesson="f14">
+      <header class="lesson__head">
+        <span class="lesson__num">14</span>
+        <div>
+          <h3>Delegates, eventos e lambdas</h3>
+          <p class="lesson__meta">Action · Func · event · callback</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Delegate é uma <strong>variável que guarda um método</strong>. Com ela você passa comportamento como argumento — é o que LINQ, eventos de UI e Unity fazem o tempo todo.</p>
+        <pre class="code"><code class="csharp">// Action: método sem retorno | Func: método com retorno
+Action&lt;string&gt; gritar = texto =&gt; Console.WriteLine(texto.ToUpper());
+Func&lt;int, int, int&gt; soma = (a, b) =&gt; a + b;
+Predicate&lt;int&gt; eGol = gols =&gt; gols &gt; 0;
+
+gritar("gooool");
+Console.WriteLine(soma(2, 3));
+
+// delegate nomeado (útil quando a assinatura se repete)
+delegate bool FiltroJogador(Jogador j);
+
+List&lt;Jogador&gt; Filtrar(List&lt;Jogador&gt; elenco, FiltroJogador filtro)
+{
+    var resultado = new List&lt;Jogador&gt;();
+    foreach (var j in elenco)
+        if (filtro(j)) resultado.Add(j);
+    return resultado;
+}
+
+var artilheiros = Filtrar(elenco, j =&gt; j.Gols &gt;= 15);
+
+// evento: notificação de que algo aconteceu
+class Partida
+{
+    public event Action&lt;string&gt;? GolMarcado;   // assinantes recebem o autor
+
+    public void MarcarGol(string autor)
+    {
+        GolMarcado?.Invoke(autor);              // ?. evita erro sem assinantes
+    }
+}
+
+var partida = new Partida();
+partida.GolMarcado += autor =&gt; Console.WriteLine($"Gol de {autor}!");
+partida.GolMarcado += autor =&gt; Console.WriteLine("Torcida explode.");
+partida.MarcarGol("Garro");                     // chama os dois inscritos</code></pre>
+        <ul class="checks">
+          <li><code>Action&lt;T&gt;</code> = recebe e não devolve; <code>Func&lt;...,TResult&gt;</code> = devolve; <code>Predicate&lt;T&gt;</code> = devolve <code>bool</code>.</li>
+          <li><code>+=</code> inscreve um handler no evento; <code>-=</code> remove (importante para não vazar memória).</li>
+          <li><code>Invoke</code> dispara o delegate; <code>?.Invoke</code> protege contra evento sem inscritos.</li>
+          <li>Lambdas capturam variáveis do escopo externo (<em>closure</em>) — cuidado ao capturar a variável de um laço.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f14">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual tipo representa um método que devolve um valor?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Action</button>
+            <button class="opt" data-correct="true">Func</button>
+            <button class="opt" data-correct="false">void</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 15 -->
+    <article class="lesson" id="l15" data-lesson="f15">
+      <header class="lesson__head">
+        <span class="lesson__num">15</span>
+        <div>
+          <h3>Async, await e threads</h3>
+          <p class="lesson__meta">Task · await · WhenAll · CancellationToken</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Baixar dados da internet, ler um arquivo grande ou esperar um banco de dados são operações <strong>de espera</strong>. Se você bloqueia a thread, a tela congela. <code>async/await</code> deixa o programa seguir vivo enquanto espera — sem criar uma thread para cada espera.</p>
+        <pre class="code"><code class="csharp">using System.Net.Http;
+
+// método async devolve Task (ou Task&lt;T&gt; quando devolve valor)
+async Task&lt;string&gt; BuscarResultadoAsync(string time, CancellationToken ct)
+{
+    using var http = new HttpClient();
+
+    // await libera a thread enquanto a resposta não chega
+    string html = await http.GetStringAsync(
+        $"https://api.exemplo.com/resultados/{time}", ct);
+
+    return html.Length &gt; 0 ? html : "sem dados";
+}
+
+// disparar várias tarefas ao mesmo tempo e esperar todas
+try
+{
+    using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+    var tarefas = new[]
+    {
+        BuscarResultadoAsync("corinthians", cts.Token),
+        BuscarResultadoAsync("palmeiras", cts.Token)
+    };
+
+    string[] resultados = await Task.WhenAll(tarefas);
+    Console.WriteLine(resultados.Length);
+}
+catch (TaskCanceledException)
+{
+    Console.WriteLine("Tempo esgotado.");   // cancelamento não é erro do programa
+}
+
+// trabalho pesado de CPU: sair da thread principal
+int CalcularTabela() =&gt; Enumerable.Range(1, 1_000_000).Sum();
+int total = await Task.Run(CalcularTabela);</code></pre>
+        <ul class="checks">
+          <li><code>async</code> marca o método; <code>await</code> espera o resultado sem travar a thread.</li>
+          <li>Não use <code>Thread.Sleep</code> em código async — use <code>await Task.Delay</code>.</li>
+          <li><code>Task.WhenAll</code> executa em paralelo e espera todas; <code>WhenAny</code> retorna na primeira que terminar.</li>
+          <li><code>CancellationToken</code> é o jeito educado de desistir de algo demorado.</li>
+          <li>Async "sobe a pilha": se você chama um método async, seu método também deve ser async. Evite <code>.Result</code> e <code>.Wait()</code> — podem travar (deadlock).</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f15">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Para que serve o <code>await</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Criar uma nova thread</button>
+            <button class="opt" data-correct="true">Esperar uma Task terminar sem bloquear a thread</button>
+            <button class="opt" data-correct="false">Encerrar o programa</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 16 -->
+    <article class="lesson" id="l16" data-lesson="f16">
+      <header class="lesson__head">
+        <span class="lesson__num">16</span>
+        <div>
+          <h3>Testes, garbage collector e boas práticas</h3>
+          <p class="lesson__meta">xUnit · IDisposable · GC · dotnet CLI</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Fechando os fundamentos: como provar que o código funciona, como liberar recursos e como não brigar com o <strong>garbage collector</strong> (o coletor de lixo que libera memória sozinho).</p>
+        <pre class="code"><code class="csharp">// ---------- TESTE AUTOMATIZADO (xUnit) ----------
+// dotnet new xunit -o Timao.Tests  |  dotnet test
+public class AproveitamentoTests
+{
+    [Fact]
+    public void TresVitoriasEmTresJogos_Dao100PorCento()
+    {
+        int aprov = Calculadora.Aproveitamento(pontos: 9, jogos: 3);
+        Assert.Equal(100, aprov);
+    }
+
+    [Theory]
+    [InlineData(0, 0, 0)]
+    [InlineData(6, 4, 50)]
+    public void CasosVariados(int pontos, int jogos, int esperado)
+    {
+        Assert.Equal(esperado, Calculadora.Aproveitamento(pontos, jogos));
+    }
+}
+
+// ---------- LIBERAR RECURSOS: using / IDisposable ----------
+// using garante Dispose() mesmo se der exceção
+using var arquivo = new StreamWriter("log.txt");
+arquivo.WriteLine("fim de jogo");
+
+class Conexao : IDisposable
+{
+    public void Dispose() =&gt; Console.WriteLine("conexão fechada");
+}
+
+// ---------- GC: o que importa na prática ----------
+// 1. objetos são liberados sozinhos quando ninguém referencia
+// 2. não chame GC.Collect() "para ajudar": piora a performance
+// 3. recursos externos (arquivo, socket, conexão) precisam de Dispose
+// 4. alocar dentro de laço quente gera pressão de memória</code></pre>
+        <ul class="checks">
+          <li>Teste automatizado prova o comportamento e evita regressão quando você mexe no código.</li>
+          <li><code>[Fact]</code> é um caso; <code>[Theory]</code> com <code>[InlineData]</code> roda vários cenários.</li>
+          <li><code>using</code> chama <code>Dispose</code> no fim do escopo — é o padrão para arquivos, streams e conexões.</li>
+          <li>O GC cuida de memória gerenciada; ele <strong>não</strong> fecha arquivos nem libera handles do sistema.</li>
+          <li>Nomes claros, métodos curtos, uma responsabilidade por classe — mais valioso que qualquer truque de linguagem.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="f16">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que o <code>using</code> garante ao sair do escopo?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">Que <code>Dispose()</code> seja chamado no objeto</button>
+            <button class="opt" data-correct="false">Que o garbage collector rode na hora</button>
+            <button class="opt" data-correct="false">Que o arquivo seja apagado</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="wrap section">
+    <div class="pager">
+      <a class="pager__item" href="index.html"><span>Anterior</span><strong>Início</strong></a>
+      <a class="pager__item pager__item--next" href="#l9"><span>Continuar</span><strong>Módulo 09 — Exceções</strong></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p><strong>Timão C#</strong> — projeto educativo independente, feito por torcedor. Sem vínculo oficial com o Sport Club Corinthians Paulista.</p>
+    <p class="foot__small">Conteúdo, código e design livres para estudo. Vai, Timão.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

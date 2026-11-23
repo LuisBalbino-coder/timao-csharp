@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trilha Automação, Desktop e Dados — Timão C#</title>
+<meta name="description" content="Trilha de automação com C#: scripts de console, agendamento, apps desktop com Avalonia e integrações com APIs, dados e nuvem.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' fill='%23fff' text-anchor='middle'%3EC%23%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip" href="#d1">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="index.html">
+      <span class="brand__crest" aria-hidden="true">C#</span>
+      <span class="brand__txt">Timão<strong>C#</strong></span>
+    </a>
+    <nav class="nav" aria-label="Trilhas">
+      <a href="index.html">Início</a>
+      <a href="fundamentos.html">Fundamentos</a>
+      <a href="games.html">Games</a>
+      <a href="web.html">Web</a>
+      <a href="automacao.html" aria-current="page">Automação</a>
+    </nav>
+    <div class="progress" title="Seu progresso no site inteiro">
+      <div class="progress__bar"><span id="progress-fill" style="width:0%"></span></div>
+      <span class="progress__label" id="progress-label">0/26</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="pagehead">
+    <div class="wrap">
+      <p class="crumb"><a href="index.html">Início</a> / Automação</p>
+      <h1>Trilha automação, desktop e dados</h1>
+      <p class="lead lead--tight">
+        C# não serve só para servidor e jogo. Dá para automatizar tarefas do dia a dia, construir
+        aplicativos de janela no Linux e Windows, e conversar com APIs, planilhas e serviços de nuvem.
+      </p>
+      <ol class="toc">
+        <li><a href="#d1">Scripts de console e agendamento</a></li>
+        <li><a href="#d2">Aplicativos desktop (Avalonia)</a></li>
+        <li><a href="#d3">Integrações, dados e nuvem</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap section">
+
+    <!-- D1 -->
+    <article class="lesson" id="d1" data-lesson="d1">
+      <header class="lesson__head">
+        <span class="lesson__num">D1</span>
+        <div>
+          <h3>Scripts de console e agendamento</h3>
+          <p class="lesson__meta">args · exit code · Directory · cron/systemd</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Antes de app bonito, o programador precisa de ferramenta chata que funciona: renomear arquivos, juntar planilhas, gerar relatório. Um script de console em C# faz isso com a mesma linguagem do resto do projeto.</p>
+        <pre class="code"><code class="csharp">using System.Text.Json;
+
+// args já vem pronto no top-level statements
+if (args.Length &lt; 2)
+{
+    Console.WriteLine("uso: relatorio &lt;pasta&gt; &lt;saida.json&gt;");
+    return 1;                       // exit code != 0 sinaliza falha
+}
+
+string origem = args[0];
+string destino = args[1];
+
+try
+{
+    var arquivos = Directory
+        .EnumerateFiles(origem, "*.log", SearchOption.AllDirectories)
+        .Select(Path.GetFileName)
+        .OrderBy(n =&gt; n)
+        .ToList();
+
+    long tamanhoTotal = Directory
+        .EnumerateFiles(origem, "*", SearchOption.AllDirectories)
+        .Sum(f =&gt; new FileInfo(f).Length);
+
+    var relatorio = new
+    {
+        Gerado = DateTime.Now,
+        Pasta = origem,
+        Logs = arquivos.Count,
+        TamanhoMB = Math.Round(tamanhoTotal / 1024d / 1024d, 2),
+        Arquivos = arquivos
+    };
+
+    File.WriteAllText(destino, JsonSerializer.Serialize(relatorio,
+        new JsonSerializerOptions { WriteIndented = true }));
+
+    Console.WriteLine($"OK: {arquivos.Count} logs em {destino}");
+    return 0;
+}
+catch (UnauthorizedAccessException ex)
+{
+    Console.Error.WriteLine($"Sem permissão: {ex.Message}");
+    return 2;
+}
+catch (IOException ex)
+{
+    Console.Error.WriteLine($"Erro de disco: {ex.Message}");
+    return 3;
+}</code></pre>
+        <ul class="checks">
+          <li>Exit code 0 = sucesso; qualquer outro valor = falha (essencial para automação e CI).</li>
+          <li><code>Path</code>, <code>Directory</code> e <code>File</code> cobrem quase todo trabalho com arquivos.</li>
+          <li>No Linux, agende com <strong>cron</strong> (<code>crontab -e</code>) ou um <em>systemd timer</em> rodando <code>dotnet /caminho/app.dll</code>.</li>
+          <li>Escreva erros em <code>Console.Error</code> e resultados em <code>Console.Out</code>: assim o script pode ser usado em pipe.</li>
+          <li>Publicar como executável único: <code>dotnet publish -c Release -r linux-x64 --self-contained</code>.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="d1">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que significa retornar <code>0</code> de um programa de console?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">Que terminou com sucesso</button>
+            <button class="opt" data-correct="false">Que não fez nada</button>
+            <button class="opt" data-correct="false">Que houve erro</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- D2 -->
+    <article class="lesson" id="d2" data-lesson="d2">
+      <header class="lesson__head">
+        <span class="lesson__num">D2</span>
+        <div>
+          <h3>Aplicativos desktop com Avalonia</h3>
+          <p class="lesson__meta">XAML · MVVM · binding · comandos</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p><strong>Avalonia</strong> é a opção multiplataforma (Linux, Windows, macOS) mais parecida com o WPF do Windows. A ideia do MVVM: a tela (View) só desenha; a lógica fica na ViewModel, que não sabe nada de botão.</p>
+        <pre class="code"><code class="csharp">// MainWindow.axaml — a tela
+&lt;Window xmlns="https://github.com/avaloniaui"
+        Title="Timão C#" Width="420" Height="320"&gt;
+  &lt;StackPanel Margin="20" Spacing="12"&gt;
+    &lt;TextBlock Text="{Binding Placar}" FontSize="26" /&gt;
+    &lt;TextBox Text="{Binding NomeGoleador}" Watermark="quem marcou?" /&gt;
+    &lt;Button Content="Registrar gol" Command="{Binding RegistrarGol}" /&gt;
+    &lt;TextBlock Text="{Binding Historico}" /&gt;
+  &lt;/StackPanel&gt;
+&lt;/Window&gt;
+
+// MainWindowViewModel.cs — a lógica
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+public partial class MainWindowViewModel : ObservableObject
+{
+    [ObservableProperty] private int gols;
+    [ObservableProperty] private string nomeGoleador = "";
+    [ObservableProperty] private string historico = "";
+
+    public string Placar =&gt; $"Corinthians {Gols}";
+
+    [RelayCommand]
+    private void RegistrarGol()
+    {
+        Gols++;
+        OnPropertyChanged(nameof(Placar));
+        Historico = $"{NomeGoleador} marcou ({Gols})";
+    }
+}</code></pre>
+        <ul class="checks">
+          <li><code>{Binding ...}</code> liga um controle da tela a uma propriedade da ViewModel.</li>
+          <li>Para a tela atualizar sozinha, a ViewModel implementa <code>INotifyPropertyChanged</code> — o toolkit gera isso com <code>[ObservableProperty]</code>.</li>
+          <li><code>[RelayCommand]</code> transforma um método em <code>Command</code> para o botão.</li>
+          <li>A ViewModel é testável sem abrir janela: essa é a grande vantagem do padrão.</li>
+          <li><code>dotnet new install Avalonia.Templates</code> e depois <code>dotnet new avalonia.mvvm</code>.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="d2">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> No padrão MVVM, onde fica a lógica da tela?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">No arquivo XAML</button>
+            <button class="opt" data-correct="true">Na ViewModel</button>
+            <button class="opt" data-correct="false">Direto no construtor da janela</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- D3 -->
+    <article class="lesson" id="d3" data-lesson="d3">
+      <header class="lesson__head">
+        <span class="lesson__num">D3</span>
+        <div>
+          <h3>Integrações, dados e nuvem</h3>
+          <p class="lesson__meta">HttpClient · CSV · Azure Functions · ML.NET</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>O que faz um programa ser útil é conversar com o mundo: consumir uma API de resultados, ler CSV de sócios, chamar um serviço de nuvem. Tudo isso é C# básico mais bibliotecas.</p>
+        <pre class="code"><code class="csharp">using System.Net.Http.Json;
+using System.Globalization;
+
+// ---------- consumir uma API pública ----------
+var http = new HttpClient { BaseAddress = new Uri("https://api.exemplo.com/") };
+var tabela = await http.GetFromJsonAsync&lt;List&lt;Time&gt;&gt;("classificacao");
+
+foreach (var t in tabela ?? [])
+    Console.WriteLine($"{t.Nome}: {t.Pontos}");
+
+// ---------- ler CSV (planilha de sócios) ----------
+var socios = File.ReadLines("socios.csv")
+    .Skip(1)                                  // pula o cabeçalho
+    .Select(linha =&gt; linha.Split(','))
+    .Select(col =&gt; new
+    {
+        Nome  = col[0],
+        Desde = DateTime.ParseExact(col[1], "dd/MM/yyyy", CultureInfo.InvariantCulture)
+    })
+    .Where(s =&gt; s.Desde.Year &lt; 2020)
+    .ToList();
+
+Console.WriteLine($"{socios.Count} sócios antigos");
+
+public record Time(string Nome, int Pontos, int Saldo);</code></pre>
+        <ul class="checks">
+          <li><code>GetFromJsonAsync</code> / <code>PostAsJsonAsync</code> resolvem a maioria das chamadas HTTP.</li>
+          <li>Uma única instância de <code>HttpClient</code> reutilizada evita esgotar conexões; em apps grandes, use <code>IHttpClientFactory</code>.</li>
+          <li>CSV se lê linha a linha; para planilhas .xlsx use a biblioteca <em>ClosedXML</em>.</li>
+          <li><strong>Azure Functions</strong>/<strong>AWS Lambda</strong> rodam C# como função serverless — código que só executa quando é chamado.</li>
+          <li><strong>ML.NET</strong> e ONNX Runtime treinam/executam modelos de IA em C#; <strong>MAUI</strong> faz apps mobile; <strong>.NET nanoFramework</strong> chega a placas IoT.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="d3">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual método converte a resposta HTTP em objetos C# automaticamente?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">GetStringAsync</button>
+            <button class="opt" data-correct="true">GetFromJsonAsync</button>
+            <button class="opt" data-correct="false">ReadAsByteArrayAsync</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <section class="wrap section">
+    <div class="pager">
+      <a class="pager__item" href="web.html"><span>Anterior</span><strong>Trilha Web</strong></a>
+      <a class="pager__item pager__item--next" href="index.html"><span>Voltar</span><strong>Início</strong></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p><strong>Timão C#</strong> — projeto educativo independente, feito por torcedor. Sem vínculo oficial com o Sport Club Corinthians Paulista.</p>
+    <p class="foot__small">Conteúdo, código e design livres para estudo. Vai, Timão.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

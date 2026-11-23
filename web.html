@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trilha Web e Back-end — Timão C#</title>
+<meta name="description" content="Trilha web com C#: Minimal API no ASP.NET Core, EF Core com SQLite, autenticação e deploy.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' fill='%23fff' text-anchor='middle'%3EC%23%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip" href="#w1">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="index.html">
+      <span class="brand__crest" aria-hidden="true">C#</span>
+      <span class="brand__txt">Timão<strong>C#</strong></span>
+    </a>
+    <nav class="nav" aria-label="Trilhas">
+      <a href="index.html">Início</a>
+      <a href="fundamentos.html">Fundamentos</a>
+      <a href="games.html">Games</a>
+      <a href="web.html" aria-current="page">Web</a>
+      <a href="automacao.html">Automação</a>
+    </nav>
+    <div class="progress" title="Seu progresso no site inteiro">
+      <div class="progress__bar"><span id="progress-fill" style="width:0%"></span></div>
+      <span class="progress__label" id="progress-label">0/26</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="pagehead">
+    <div class="wrap">
+      <p class="crumb"><a href="index.html">Início</a> / Web</p>
+      <h1>Trilha web e back-end</h1>
+      <p class="lead lead--tight">
+        A maior fatia do mercado de C#: APIs, sistemas e serviços com <strong>ASP.NET Core</strong>.
+        Três módulos para você sair de um endpoint "olá" até um CRUD com banco e autenticação.
+      </p>
+      <ol class="toc">
+        <li><a href="#w1">Minimal API — seu primeiro endpoint</a></li>
+        <li><a href="#w2">EF Core e banco de dados</a></li>
+        <li><a href="#w3">Autenticação, configuração e deploy</a></li>
+      </ol>
+      <p class="note">Requisito: .NET SDK instalado. Crie com <code>dotnet new web -o TimaoApi</code> e rode com <code>dotnet run</code>.</p>
+    </div>
+  </section>
+
+  <section class="wrap section">
+
+    <!-- W1 -->
+    <article class="lesson" id="w1" data-lesson="w1">
+      <header class="lesson__head">
+        <span class="lesson__num">W1</span>
+        <div>
+          <h3>Minimal API — seu primeiro endpoint</h3>
+          <p class="lesson__meta">MapGet · MapPost · rota · injeção de dependência · JSON automático</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Uma <strong>API</strong> é um programa que responde requisições HTTP com dados (quase sempre JSON). No ASP.NET Core moderno, o formato <em>Minimal API</em> cria endpoints em poucas linhas — e o framework já serializa objetos para JSON, valida rotas e trata erros.</p>
+        <pre class="code"><code class="csharp">var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+// lista em memória só para o exemplo
+var elenco = new List&lt;Jogador&gt;
+{
+    new(1, "Rodrigo Garro", 10, 12),
+    new(2, "Yuri Alberto", 9, 17)
+};
+
+// GET /jogadores
+app.MapGet("/jogadores", () =&gt; elenco);
+
+// GET /jogadores/1 — 404 se não existir
+app.MapGet("/jogadores/{id:int}", (int id) =&gt;
+{
+    var j = elenco.FirstOrDefault(x =&gt; x.Id == id);
+    return j is null ? Results.NotFound() : Results.Ok(j);
+});
+
+// POST /jogadores — recebe JSON no corpo e devolve 201
+app.MapPost("/jogadores", (Jogador novo) =&gt;
+{
+    elenco.Add(novo);
+    return Results.Created($"/jogadores/{novo.Id}", novo);
+});
+
+// DELETE /jogadores/1
+app.MapDelete("/jogadores/{id:int}", (int id) =&gt;
+    elenco.RemoveAll(j =&gt; j.Id == id) &gt; 0
+        ? Results.NoContent()
+        : Results.NotFound());
+
+app.Run();
+
+public record Jogador(int Id, string Nome, int Camisa, int Gols);</code></pre>
+        <ul class="checks">
+          <li><code>MapGet</code>, <code>MapPost</code>, <code>MapPut</code>, <code>MapDelete</code> definem rotas por verbo HTTP.</li>
+          <li><code>{id:int}</code> é <em>route constraint</em>: a rota só casa se for inteiro.</li>
+          <li>Parâmetros simples vêm da rota/query; objetos complexos vêm do corpo JSON automaticamente.</li>
+          <li><code>Results.Ok</code>, <code>NotFound</code>, <code>Created</code>, <code>NoContent</code> devolvem os status HTTP corretos (200, 404, 201, 204).</li>
+          <li>O middleware embutido cuida de CORS, logging, compressão e tratamento de erro — você configura em <code>builder.Services</code>.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="w1">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual status HTTP é o correto ao criar um recurso com sucesso?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">200 OK</button>
+            <button class="opt" data-correct="true">201 Created</button>
+            <button class="opt" data-correct="false">404 Not Found</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- W2 -->
+    <article class="lesson" id="w2" data-lesson="w2">
+      <header class="lesson__head">
+        <span class="lesson__num">W2</span>
+        <div>
+          <h3>EF Core e banco de dados</h3>
+          <p class="lesson__meta">DbContext · DbSet · migrations · LINQ no banco</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p><strong>EF Core</strong> é o ORM oficial do .NET: você escreve classes C# e ele cuida do SQL. Cada <code>DbContext</code> representa uma sessão com o banco e cada <code>DbSet&lt;T&gt;</code> é uma tabela.</p>
+        <pre class="code"><code class="csharp">using Microsoft.EntityFrameworkCore;
+
+public class Jogador
+{
+    public int Id { get; set; }
+    public string Nome { get; set; } = "";
+    public int Camisa { get; set; }
+    public int Gols { get; set; }
+}
+
+public class TimaoContext : DbContext
+{
+    public DbSet&lt;Jogador&gt; Jogadores =&gt; Set&lt;Jogador&gt;();
+
+    protected override void OnConfiguring(DbContextOptionsBuilder o) =&gt;
+        o.UseSqlite("Data Source=timao.db");
+}
+
+// ---------- instalar e migrar ----------
+// dotnet add package Microsoft.EntityFrameworkCore.Sqlite
+// dotnet add package Microsoft.EntityFrameworkCore.Design
+// dotnet tool install --global dotnet-ef
+// dotnet ef migrations add Inicial && dotnet ef database update
+
+using var db = new TimaoContext();
+
+// criar
+db.Jogadores.Add(new Jogador { Nome = "Garro", Camisa = 10, Gols = 12 });
+db.SaveChanges();                       // aqui o INSERT acontece
+
+// consultar (LINQ vira SQL, não carrega a tabela toda)
+var artilheiros = db.Jogadores
+    .Where(j =&gt; j.Gols &gt;= 10)
+    .OrderByDescending(j =&gt; j.Gols)
+    .ToList();
+
+// atualizar
+var garro = db.Jogadores.FirstOrDefault(j =&gt; j.Camisa == 10);
+if (garro is not null)
+{
+    garro.Gols += 1;
+    db.SaveChanges();
+}
+
+// remover
+db.Jogadores.Where(j =&gt; j.Gols == 0).ExecuteDelete();</code></pre>
+        <ul class="checks">
+          <li><code>DbContext</code> é descartável: use <code>using</code> ou injeção de dependência (escopo por requisição).</li>
+          <li><strong>Migrations</strong> versionam o esquema do banco a partir das suas classes.</li>
+          <li><code>SaveChanges</code> agrupa tudo numa transação: ou salva tudo, ou nada.</li>
+          <li>Use <code>AsNoTracking()</code> em leitura pura: economiza memória e é mais rápido.</li>
+          <li>Evite consultar dentro de laço (problema N+1): use <code>Include</code> ou uma consulta só.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="w2">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> O que <code>db.SaveChanges()</code> faz?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Abre a conexão apenas</button>
+            <button class="opt" data-correct="true">Grava no banco as mudanças pendentes</button>
+            <button class="opt" data-correct="false">Cria as tabelas automaticamente</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- W3 -->
+    <article class="lesson" id="w3" data-lesson="w3">
+      <header class="lesson__head">
+        <span class="lesson__num">W3</span>
+        <div>
+          <h3>Autenticação, configuração e deploy</h3>
+          <p class="lesson__meta">JWT · secrets · Docker · produção</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>API pronta é API protegida, configurada e publicada. Os três assuntos que separam "funciona na minha máquina" de "está no ar".</p>
+        <pre class="code"><code class="csharp">// ---------- 1. Configuração e segredos ----------
+// appsettings.json  →  { "Jwt": { "Chave": "..." } }
+// NUNCA coloque segredo no código nem no repositório:
+//   dotnet user-secrets init
+//   dotnet user-secrets set "Jwt:Chave" "valor-super-secreto"
+var chave = builder.Configuration["Jwt:Chave"];
+
+// ---------- 2. Autenticação JWT (resumo) ----------
+builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/perfil", (ClaimsPrincipal user) =&gt;
+    $"Olá, {user.Identity?.Name}")   // vem do token
+   .RequireAuthorization();
+
+// ---------- 3. Erros sem vazar detalhes ----------
+app.UseExceptionHandler(erro =&gt; erro.Run(async ctx =&gt;
+{
+    ctx.Response.StatusCode = 500;
+    await ctx.Response.WriteAsJsonAsync(new { erro = "Erro interno" });
+}));
+
+// ---------- 4. Injeção de dependência ----------
+builder.Services.AddSingleton&lt;IRepositorioJogadores, RepositorioEmMemoria&gt;();
+builder.Services.AddScoped&lt;TimaoContext&gt;();   // uma por requisição
+
+app.MapGet("/jogadores", (IRepositorioJogadores repo) =&gt; repo.Todos());</code></pre>
+        <ul class="checks">
+          <li>JWT é um token assinado: o servidor confia nele sem consultar o banco a cada requisição.</li>
+            <li>Segredos vão em <em>user-secrets</em> (dev) ou variáveis de ambiente (produção) — nunca no Git.</li>
+          <li>Ciclos de vida na DI: <code>Singleton</code> (um para o app), <code>Scoped</code> (um por requisição), <code>Transient</code> (novo a cada uso).</li>
+          <li>Em produção: HTTPS obrigatório, <code>UseExceptionHandler</code>, logs estruturados e limite de requisições.</li>
+          <li>Deploy comum: publicar com <code>dotnet publish -c Release</code>, rodar atrás de Nginx, ou empacotar em Docker (<code>mcr.microsoft.com/dotnet/aspnet</code>).</li>
+        </ul>
+
+        <div class="quiz" data-quiz="w3">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Onde guardar a chave secreta do JWT em desenvolvimento?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">Em user-secrets do .NET</button>
+            <button class="opt" data-correct="false">Dentro do Program.cs</button>
+            <button class="opt" data-correct="false">Num comentário do repositório</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <section class="wrap section">
+    <div class="pager">
+      <a class="pager__item" href="games.html"><span>Anterior</span><strong>Trilha Games</strong></a>
+      <a class="pager__item pager__item--next" href="automacao.html"><span>Continuar</span><strong>Automação e desktop</strong></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p><strong>Timão C#</strong> — projeto educativo independente, feito por torcedor. Sem vínculo oficial com o Sport Club Corinthians Paulista.</p>
+    <p class="foot__small">Conteúdo, código e design livres para estudo. Vai, Timão.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

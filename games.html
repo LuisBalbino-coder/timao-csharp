@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trilha Games (Unity) — Timão C#</title>
+<meta name="description" content="Trilha de games em C# com Unity: MonoBehaviour, física, UI, prefabs, ScriptableObject e build.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' fill='%23fff' text-anchor='middle'%3EC%23%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip" href="#g1">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="index.html">
+      <span class="brand__crest" aria-hidden="true">C#</span>
+      <span class="brand__txt">Timão<strong>C#</strong></span>
+    </a>
+    <nav class="nav" aria-label="Trilhas">
+      <a href="index.html">Início</a>
+      <a href="fundamentos.html">Fundamentos</a>
+      <a href="games.html" aria-current="page">Games</a>
+      <a href="web.html">Web</a>
+      <a href="automacao.html">Automação</a>
+    </nav>
+    <div class="progress" title="Seu progresso no site inteiro">
+      <div class="progress__bar"><span id="progress-fill" style="width:0%"></span></div>
+      <span class="progress__label" id="progress-label">0/26</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="pagehead">
+    <div class="wrap">
+      <p class="crumb"><a href="index.html">Início</a> / Games</p>
+      <h1>Trilha de games — Unity com C#</h1>
+      <p class="lead lead--tight">
+        Unity é a engine mais usada do mundo e programa-se em C#. Aqui você sai do console e entra no
+        jogo: script de componente, física, UI e build. Faça os fundamentos (pelo menos até o módulo 12) antes.
+      </p>
+      <ol class="toc">
+        <li><a href="#g1">Seu primeiro MonoBehaviour</a></li>
+        <li><a href="#g2">Física, colisão e coleta</a></li>
+        <li><a href="#g3">UI, prefabs e ScriptableObject</a></li>
+        <li><a href="#g4">Build, performance e roteiro</a></li>
+      </ol>
+      <p class="note">Para praticar: instale o <strong>Unity Hub</strong> e crie um projeto 2D. No Linux Mint ele roda nativamente (build com suporte a Linux e Windows).</p>
+    </div>
+  </section>
+
+  <section class="wrap section">
+
+    <!-- G1 -->
+    <article class="lesson" id="g1" data-lesson="g1">
+      <header class="lesson__head">
+        <span class="lesson__num">G1</span>
+        <div>
+          <h3>Seu primeiro MonoBehaviour</h3>
+          <p class="lesson__meta">GameObject · Component · Start/Update · Time.deltaTime</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>No Unity tudo é <strong>GameObject</strong> (o objeto na cena) com <strong>Componentes</strong> pendurados nele (transform, renderer, script). Um script C# que herda de <code>MonoBehaviour</code> vira um componente: você arrasta no objeto e ele passa a rodar os métodos de ciclo de vida.</p>
+        <pre class="code"><code class="csharp">using UnityEngine;
+
+public class MovimentoJogador : MonoBehaviour
+{
+    [SerializeField] private float velocidade = 6f;   // aparece no Inspector
+    [SerializeField] private float forcaPulo = 8f;
+
+    private Rigidbody2D corpo;
+
+    // roda uma vez, antes do primeiro Update
+    private void Awake()
+    {
+        corpo = GetComponent&lt;Rigidbody2D&gt;();
+    }
+
+    // roda uma vez, no primeiro frame (depois dos Awake de todos)
+    private void Start()
+    {
+        Debug.Log("Jogador em campo!");
+    }
+
+    // roda a cada frame: leitura de input
+    private void Update()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+
+        // deltaTime deixa o movimento independente do FPS
+        transform.Translate(Vector3.right * horizontal * velocidade * Time.deltaTime);
+
+        if (Input.GetButtonDown("Jump"))
+            corpo.AddForce(Vector2.up * forcaPulo, ForceMode2D.Impulse);
+    }
+
+    // roda em intervalo fixo: física
+    private void FixedUpdate()
+    {
+        // velocidade constante, sem depender do frame
+        corpo.linearVelocity = new Vector2(corpo.linearVelocity.x, corpo.linearVelocity.y);
+    }
+}</code></pre>
+        <ul class="checks">
+          <li>Ciclo de vida: <code>Awake</code> → <code>OnEnable</code> → <code>Start</code> → <code>Update</code> (todo frame) → <code>FixedUpdate</code> (física) → <code>OnDisable</code> → <code>OnDestroy</code>.</li>
+          <li><code>[SerializeField]</code> mostra a variável no Inspector sem deixá-la pública.</li>
+          <li>Multiplique movimento por <code>Time.deltaTime</code>; sem isso o jogo fica rápido em máquina boa e lento em máquina fraca.</li>
+          <li>Input fica no <code>Update</code>; física fica no <code>FixedUpdate</code>.</li>
+          <li><code>Debug.Log</code> escreve no Console do editor — seu <code>Console.WriteLine</code> do jogo.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="g1">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Por que multiplicar o movimento por <code>Time.deltaTime</code>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">Para o movimento não depender da taxa de quadros</button>
+            <button class="opt" data-correct="false">Para deixar o jogo mais rápido</button>
+            <button class="opt" data-correct="false">Porque o Unity exige esse parâmetro</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- G2 -->
+    <article class="lesson" id="g2" data-lesson="g2">
+      <header class="lesson__head">
+        <span class="lesson__num">G2</span>
+        <div>
+          <h3>Física, colisão e coleta de itens</h3>
+          <p class="lesson__meta">Rigidbody2D · Collider2D · Tag · OnTriggerEnter2D</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Colisão precisa de duas peças: um <strong>Collider</strong> (a forma) e, se o objeto se move, um <strong>Rigidbody</strong> (a massa que a física controla). Sem Rigidbody, o Unity só detecta o toque, não empurra.</p>
+        <pre class="code"><code class="csharp">using UnityEngine;
+
+public class Coletavel : MonoBehaviour
+{
+    [SerializeField] private int valor = 1;
+    [SerializeField] private AudioClip somMoeda;
+
+    private void OnTriggerEnter2D(Collider2D outro)
+    {
+        // só reage ao jogador
+        if (!outro.CompareTag("Player")) return;
+
+        var placar = outro.GetComponent&lt;Placar&gt;();
+        if (placar != null)
+            placar.Adicionar(valor);
+
+        if (somMoeda != null)
+            AudioSource.PlayClipAtPoint(somMoeda, transform.position, 0.7f);
+
+        Destroy(gameObject);   // remove o item da cena
+    }
+}
+
+public class Placar : MonoBehaviour
+{
+    [SerializeField] private int pontos;
+
+    public void Adicionar(int valor)
+    {
+        pontos += valor;
+        Debug.Log($"Pontos: {pontos}");
+
+        if (pontos &gt;= 100)
+            Debug.Log("Fim de jogo: vitória!");
+    }
+}</code></pre>
+        <ul class="checks">
+          <li><code>OnCollisionEnter2D</code> = batida com resposta física; <code>OnTriggerEnter2D</code> = atravessa e só dispara evento (marque <em>Is Trigger</em>).</li>
+          <li>Tags evitam comparações frágeis de nome e são mais rápidas que <code>name == "..."</code>.</li>
+          <li><code>GetComponent&lt;T&gt;()</code> busca componente no mesmo objeto; <code>GetComponentInChildren</code> desce a hierarquia.</li>
+          <li><code>Destroy(gameObject)</code> destrói o objeto inteiro; <code>Destroy(this)</code> remove só o componente.</li>
+          <li>Para empurrar de verdade, mova via <code>Rigidbody2D</code> (<code>AddForce</code>, <code>linearVelocity</code>), não via <code>transform.position</code>.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="g2">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual callback dispara quando o objeto atravessa uma área marcada como <em>Is Trigger</em>?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">OnCollisionEnter2D</button>
+            <button class="opt" data-correct="true">OnTriggerEnter2D</button>
+            <button class="opt" data-correct="false">FixedUpdate</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- G3 -->
+    <article class="lesson" id="g3" data-lesson="g3">
+      <header class="lesson__head">
+        <span class="lesson__num">G3</span>
+        <div>
+          <h3>UI, prefabs e ScriptableObject</h3>
+          <p class="lesson__meta">Canvas · TextMeshPro · Instantiate · dados em asset</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Jogo não é só a cena: você precisa mostrar HUD, repetir objetos (prefabs) e guardar configurações de dados fora do código (ScriptableObject).</p>
+        <pre class="code"><code class="csharp">using TMPro;
+using UnityEngine;
+
+public class HudJogo : MonoBehaviour
+{
+    [SerializeField] private TextMeshProUGUI textoPlacar;
+    [SerializeField] private GameObject prefabBola;
+    [SerializeField] private Transform pontoDeSaida;
+
+    private int gols;
+
+    public void RegistrarGol()
+    {
+        gols++;
+        textoPlacar.text = $\"Corinthians {gols}\";
+
+        // instancia uma cópia do prefab na cena
+        var bola = Instantiate(prefabBola, pontoDeSaida.position, Quaternion.identity);
+        Destroy(bola, 5f);   // limpa depois de 5 segundos
+    }
+}
+
+// ScriptableObject: dado que vive fora da cena, editável no Inspector
+[CreateAssetMenu(fileName = \"Jogador\", menuName = \"Timao/Jogador\")]
+public class DadosJogador : ScriptableObject
+{
+    public string nome;
+    public int camisa;
+    public float velocidade = 5f;
+    public int forca = 70;
+}
+
+// usável em qualquer cena, sem duplicar valores no código
+public class AplicarDados : MonoBehaviour
+{
+    [SerializeField] private DadosJogador dados;
+
+    private void Start()
+    {
+        name = dados.nome;
+        Debug.Log($\"#{dados.camisa} {dados.nome} — força {dados.forca}\");
+    }
+}</code></pre>
+        <ul class="checks">
+          <li><strong>Prefab</strong> é um modelo salvo: <code>Instantiate</code> cria cópias em tempo de execução.</li>
+          <li><code>ScriptableObject</code> é um asset de dados: ideal para fichas de jogador, itens e balanceamento, e é compartilhado entre cenas sem recarregar.</li>
+          <li>UI no Unity usa <em>Canvas</em>; textos modernos usam TextMeshPro (<code>TMPro</code>).</li>
+          <li><code>Destroy(obj, 5f)</code> agenda a destruição — bom para efeitos temporários.</li>
+          <li><code>Quaternion.identity</code> significa "sem rotação".</li>
+        </ul>
+
+        <div class="quiz" data-quiz="g3">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Para que serve um ScriptableObject?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="true">Guardar dados configuráveis como um asset do projeto</button>
+            <button class="opt" data-correct="false">Renderizar a interface do jogo</button>
+            <button class="opt" data-correct="false">Compilar o jogo para Linux</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+    <!-- G4 -->
+    <article class="lesson" id="g4" data-lesson="g4">
+      <header class="lesson__head">
+        <span class="lesson__num">G4</span>
+        <div>
+          <h3>Build, performance e roteiro</h3>
+          <p class="lesson__meta">IL2CPP · Profiler · object pooling · próximo passo</p>
+        </div>
+      </header>
+      <div class="lesson__body">
+        <p>Build no Unity é escolher plataforma (PC/Linux/Android/Web), script backend e qualidade gráfica. Para um jogo 2D leve, um build Linux com IL2CPP costuma abrir em qualquer notebook.</p>
+        <pre class="code"><code class="csharp">// PROBLEMA: criar e destruir objetos a cada tiro gera lixo de memória
+void AtirarRuim() =&gt; Instantiate(balaPrefab, cano.position, cano.rotation);
+
+// SOLUÇÃO: object pooling — reaproveita uma pilha de objetos
+public class PoolBalas : MonoBehaviour
+{
+    [SerializeField] private GameObject prefab;
+    [SerializeField] private int tamanho = 20;
+
+    private readonly Queue&lt;GameObject&gt; livres = new();
+
+    private void Awake()
+    {
+        for (int i = 0; i &lt; tamanho; i++)
+        {
+            var b = Instantiate(prefab, transform);
+            b.SetActive(false);
+            livres.Enqueue(b);
+        }
+    }
+
+    public GameObject Pegar(Vector3 posicao)
+    {
+        if (livres.Count == 0) return null;
+        var b = livres.Dequeue();
+        b.transform.position = posicao;
+        b.SetActive(true);
+        return b;
+    }
+
+    public void Devolver(GameObject b)
+    {
+        b.SetActive(false);
+        livres.Enqueue(b);
+    }
+}</code></pre>
+        <ul class="checks">
+          <li><strong>Profiler</strong> (Window → Analysis → Profiler) mostra onde o frame está sendo gasto antes de você otimizar no escuro.</li>
+          <li><strong>Object pooling</strong> troca <code>Instantiate</code>/<code>Destroy</code> por ativar/desativar: menos GC, frame estável.</li>
+          <li>Build Settings → Player Settings: escolha <em>IL2CPP</em> para releases (mais rápido) e <em>Mono</em> para builds de teste rápidos.</li>
+          <li>Rode o build na máquina mais fraca que você tiver: é lá que os problemas aparecem.</li>
+          <li>Roteiro: faça um jogo pequeno e termine. Um clone de Pong com placar e menu ensina mais que dez protótipos abandonados.</li>
+        </ul>
+
+        <div class="quiz" data-quiz="g4">
+          <p class="quiz__q"><span class="quiz__tag">Quiz</span> Qual é a vantagem principal do object pooling?</p>
+          <div class="quiz__opts">
+            <button class="opt" data-correct="false">Deixa o jogo com gráficos melhores</button>
+            <button class="opt" data-correct="true">Reduz criação/destruição de objetos e alivia o garbage collector</button>
+            <button class="opt" data-correct="false">Compila mais rápido</button>
+          </div>
+          <p class="quiz__fb" aria-live="polite"></p>
+        </div>
+      </div>
+    </article>
+
+  </section>
+
+  <section class="wrap section">
+    <div class="pager">
+      <a class="pager__item" href="fundamentos.html"><span>Anterior</span><strong>Fundamentos</strong></a>
+      <a class="pager__item pager__item--next" href="web.html"><span>Continuar</span><strong>Trilha Web</strong></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p><strong>Timão C#</strong> — projeto educativo independente, feito por torcedor. Sem vínculo oficial com o Sport Club Corinthians Paulista.</p>
+    <p class="foot__small">Conteúdo, código e design livres para estudo. Vai, Timão.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

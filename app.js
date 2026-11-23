@@ -62,9 +62,10 @@
 
   /* ---------------- progresso ---------------- */
 
-  const STORAGE_KEY = 'timao-csharp:progresso:v1';
+  const STORAGE_KEY = 'timao-csharp:progresso:v2';
   const lessons = Array.from(document.querySelectorAll('.lesson'));
-  const total = lessons.length;
+  // total de módulos do site inteiro (16 fundamentos + 4 games + 3 web + 3 automação)
+  const total = 26;
   const fill = document.getElementById('progress-fill');
   const label = document.getElementById('progress-label');
   let done = new Set();
@@ -88,6 +89,12 @@
     const count = done.size;
     if (fill) fill.style.width = Math.round((count / total) * 100) + '%';
     if (label) label.textContent = count + '/' + total;
+
+    const resumo = document.querySelector('.reset-box p');
+    if (resumo) {
+      resumo.textContent =
+        'Seu progresso (' + count + ' de ' + total + ' m\u00f3dulos) est\u00e1 salvo neste navegador.';
+    }
 
     lessons.forEach(function (lesson) {
       const id = lesson.dataset.lesson;
